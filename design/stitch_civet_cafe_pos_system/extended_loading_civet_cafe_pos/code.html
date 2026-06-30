@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Civet Cafe POS | Loading</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#ffe9e3",
+                    "surface-container-high": "#ffe2da",
+                    "background": "#fff8f6",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#ece0dc",
+                    "on-surface": "#2c160e",
+                    "on-secondary": "#ffffff",
+                    "tertiary": "#181818",
+                    "surface-variant": "#ffdbd0",
+                    "surface-tint": "#745853",
+                    "surface-dim": "#fbd1c4",
+                    "primary-fixed-dim": "#e3beb8",
+                    "surface-container-highest": "#ffdbd0",
+                    "inverse-on-surface": "#ffede8",
+                    "surface-container-low": "#fff1ed",
+                    "secondary-fixed-dim": "#cfc4c0",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fff8f6",
+                    "on-background": "#2c160e",
+                    "primary": "#271310",
+                    "secondary": "#655d5a",
+                    "error": "#ba1a1a",
+                    "outline": "#827472",
+                    "primary-fixed": "#ffdad4",
+                    "tertiary-fixed-dim": "#c7c6c4",
+                    "on-secondary-fixed-variant": "#4c4542",
+                    "on-secondary-fixed": "#201a18",
+                    "on-tertiary-container": "#959492",
+                    "on-primary-container": "#ae8d87",
+                    "primary-container": "#3e2723",
+                    "tertiary-fixed": "#e4e2e0",
+                    "inverse-surface": "#442a22",
+                    "error-container": "#ffdad6",
+                    "outline-variant": "#d3c3c0",
+                    "inverse-primary": "#e3beb8",
+                    "on-tertiary-fixed": "#1b1c1b",
+                    "surface": "#fff8f6",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#2c2d2c",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#2b1613",
+                    "secondary-container": "#ece0dc",
+                    "on-tertiary-fixed-variant": "#464746",
+                    "on-secondary-container": "#6b6360",
+                    "on-primary-fixed-variant": "#5b403c",
+                    "on-surface-variant": "#504442"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "24px",
+                    "base": "8px",
+                    "grid-gutter": "16px",
+                    "pos-touch-target": "48px",
+                    "lg": "40px",
+                    "xs": "4px",
+                    "sm": "12px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Lexend"],
+                    "label-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Lexend"],
+                    "headline-lg-mobile": ["Lexend"],
+                    "headline-lg": ["Lexend"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        .loader-ring {
+            border: 4px solid #fff1ed;
+            border-top: 4px solid #271310;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .dot-pulse {
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex items-center justify-center overflow-hidden">
+<!-- Atmospheric Subtle Background Effect -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden opacity-30">
+<div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-surface-container rounded-full blur-[100px]"></div>
+<div class="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-surface-container-high rounded-full blur-[100px]"></div>
+</div>
+<!-- Main Loading Canvas -->
+<main class="relative z-10 flex flex-col items-center max-w-md w-full px-grid-gutter text-center">
+<!-- Brand Identity Section -->
+<div class="mb-lg animate-float">
+<div class="w-32 h-32 mx-auto mb-base rounded-full bg-surface-container flex items-center justify-center shadow-md border border-surface-variant">
+<span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings: 'FILL' 1;">
+                    coffee
+                </span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">
+                Civet Cafe
+            </h1>
+<p class="font-label-lg text-label-lg text-on-surface-variant opacity-80 uppercase tracking-widest mt-xs">
+                Terminal 01
+            </p>
+</div>
+<!-- Loading Interaction Component -->
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-xl shadow-sm w-full transition-all duration-500 ease-in-out">
+<div class="flex flex-col items-center gap-base">
+<!-- Spinner -->
+<div class="loader-ring mb-base"></div>
+<!-- Messaging -->
+<div class="space-y-xs">
+<p class="font-headline-md text-headline-md text-primary transition-opacity duration-300" id="loading-text">Deep-cleaning the filters...</p>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        Setting up your artisanal workspace
+                    </p>
+</div>
+<!-- Custom Progress Bar -->
+<div class="w-full h-1.5 bg-surface-container-low rounded-full mt-md overflow-hidden">
+<div class="h-full bg-primary transition-all duration-[2000ms] ease-out w-0" id="progress-bar"></div>
+</div>
+<div class="flex justify-between w-full mt-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant" id="progress-percent">0%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">Synchronizing inventory and history <span class="dot-pulse">.</span><span class="dot-pulse" style="animation-delay: 0.2s">.</span><span class="dot-pulse" style="animation-delay: 0.4s">.</span></span>
+</div>
+<div class="mt-md p-sm bg-surface-container-low rounded-lg border border-surface-variant text-left w-full"><div class="flex items-center gap-sm mb-xs"><span class="material-symbols-outlined text-primary text-[20px]">lightbulb</span><span class="font-label-lg text-label-lg text-primary uppercase tracking-wider">Coffee Fact</span></div><p class="font-body-md text-label-sm text-on-surface-variant">Did you know? Coffee beans are actually the seeds of a fruit called a coffee cherry. They only look like beans after being processed and roasted.</p></div></div>
+</div>
+<!-- System Meta-Info -->
+<div class="mt-lg">
+<div class="flex items-center justify-center gap-sm text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span class="font-label-sm text-label-sm">Secure POS Connection Active</span>
+</div>
+</div>
+</main>
+<!-- Detailed Image Prompt Logic (Hidden) -->
+<div class="hidden">
+<div data-alt="A professional, high-end cafe environment during a quiet morning. The scene features a sleek, espresso machine in the background with soft steam rising. In the foreground, a warm wooden countertop holds a few ceramic cups. The lighting is soft and golden, filtering through large windows, creating a peaceful and efficient boutique atmosphere consistent with a luxury coffee brand." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCcj3W87NuUAGS8x4Vwo6F5nhZlwrXtLlnlmOuH-SGYmZm6sFRLJJmgL9ZJGPRoJwW3GrgjmxSQgOSAMnFqpjOTTufbk4Ro_PXyPAl7dk1rGC-lZIvQ56OX2kHJ_IKTuwL23Sszjh5etBnDlIQvPRq28zAJES57n3LruuyJreZyZFUobx0I_sm3-zhglTq0Z50P3TrSSKzcu3CdteGdayuxYdDSEeT6LvogpOLfcjL0G3t6ogBsB4Nk4VDFvRZ53Mrpbe9fF2a7gYk')"></div>
+</div>
+<!-- Micro-interaction Logic -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.getElementById('progress-bar');
+            const progressPercent = document.getElementById('progress-percent');
+            const loadingText = document.getElementById('loading-text');
+            
+            const messages = [
+                "Brewing your data...",
+                "Warming up the steam wand...",
+                "Grinding the beans...",
+                "Frothing the interface...",
+                "Almost ready to serve..."
+            ];
+            
+            let progress = 0;
+            let messageIndex = 0;
+
+            const interval = setInterval(() => {
+                // Randomize progress jumps for a more "organic" feel
+                progress += Math.floor(Math.random() * 8) + 2;
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    // In a real app, this would trigger the redirect
+                    setTimeout(() => {
+                        loadingText.innerText = "Order Up!";
+                    }, 500);
+                }
+
+                progressBar.style.width = `${progress}%`;
+                progressPercent.innerText = `${progress}%`;
+
+                // Cycle through friendly messages
+                if (progress > (messageIndex + 1) * 20 && messageIndex < messages.length - 1) {
+                    messageIndex++;
+                    loadingText.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingText.innerText = messages[messageIndex];
+                        loadingText.style.opacity = '1';
+                    }, 300);
+                }
+            }, 400);
+        });
+    </script>
+</body></html>

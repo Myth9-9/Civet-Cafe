@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Civet Cafe POS | Order Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#e3beb8",
+                    "on-primary-fixed-variant": "#5b403c",
+                    "surface": "#fff8f6",
+                    "on-error": "#ffffff",
+                    "primary": "#271310",
+                    "on-tertiary-fixed": "#1b1c1b",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#181818",
+                    "on-surface-variant": "#504442",
+                    "on-tertiary-fixed-variant": "#464746",
+                    "on-secondary-fixed-variant": "#4c4542",
+                    "outline": "#827472",
+                    "on-surface": "#2c160e",
+                    "on-primary-fixed": "#2b1613",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#2c2d2c",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#ece0dc",
+                    "on-secondary-fixed": "#201a18",
+                    "surface-variant": "#ffdbd0",
+                    "surface-dim": "#fbd1c4",
+                    "surface-container": "#ffe9e3",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#959492",
+                    "secondary-fixed-dim": "#cfc4c0",
+                    "on-secondary-container": "#6b6360",
+                    "on-background": "#2c160e",
+                    "surface-container-low": "#fff1ed",
+                    "tertiary-fixed-dim": "#c7c6c4",
+                    "background": "#fff8f6",
+                    "inverse-on-surface": "#ffede8",
+                    "primary-container": "#3e2723",
+                    "primary-fixed": "#ffdad4",
+                    "secondary-fixed": "#ece0dc",
+                    "on-error-container": "#93000a",
+                    "on-primary-container": "#ae8d87",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fff8f6",
+                    "inverse-surface": "#442a22",
+                    "tertiary-fixed": "#e4e2e0",
+                    "secondary": "#655d5a",
+                    "outline-variant": "#d3c3c0",
+                    "surface-tint": "#745853",
+                    "surface-container-highest": "#ffdbd0",
+                    "surface-container-high": "#ffe2da",
+                    "primary-fixed-dim": "#e3beb8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "40px",
+                    "pos-touch-target": "48px",
+                    "xs": "4px",
+                    "md": "24px",
+                    "base": "8px",
+                    "sm": "12px",
+                    "grid-gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Lexend"],
+                    "label-lg": ["Inter"],
+                    "headline-md": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Lexend"],
+                    "headline-lg": ["Lexend"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #fff8f6; font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .shadow-warm { box-shadow: 0 4px 12px rgba(62, 39, 35, 0.08); }
+        .pos-card-hover:hover { transform: translateY(-2px); transition: all 0.2s ease; }
+        .order-row:nth-child(even) { background-color: #F5F0EE; }
+        
+        /* Mobile Order Panel Transition */
+        #order-panel-mobile {
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+        }
+        #order-panel-mobile.open {
+            transform: translateY(0);
+        }
+        
+        @media (min-width: 1024px) {
+            #order-panel-mobile {
+                transform: none !important;
+                position: relative !important;
+                display: flex !important;
+            }
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col md:flex-row overflow-hidden bg-background text-on-background">
+<!-- Mobile Menu Overlay -->
+<div class="fixed inset-0 bg-black/50 z-[60] hidden md:hidden" id="mobile-sidebar-overlay" onclick="toggleSidebar()"></div>
+<!-- SideNavBar -->
+<aside class="fixed inset-y-0 left-0 w-64 bg-surface-container-low z-[70] transform -translate-x-full transition-transform duration-300 md:translate-x-0 md:static border-r border-outline-variant flex flex-col py-md shadow-md" id="sidebar">
+<div class="px-md mb-lg flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-white">coffee</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary leading-none">Civet Cafe</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Downtown Branch</p>
+</div>
+</div>
+<button class="md:hidden text-primary" onclick="toggleSidebar()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto no-scrollbar">
+<a class="text-secondary hover:bg-secondary-container/50 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 active:scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="text-secondary hover:bg-secondary-container/50 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 active:scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined">table_restaurant</span>
+<span class="font-label-lg text-label-lg">Tables</span>
+</a>
+<a class="bg-primary text-on-primary rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 active:scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-lg text-label-lg">Orders</span>
+</a>
+<a class="text-secondary hover:bg-secondary-container/50 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 active:scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-lg text-label-lg">Menu</span>
+</a>
+<a class="text-secondary hover:bg-secondary-container/50 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 active:scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-lg text-label-lg">Billing</span>
+</a>
+<a class="text-secondary hover:bg-secondary-container/50 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 active:scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Users</span>
+</a>
+<a class="text-secondary hover:bg-secondary-container/50 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 active:scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<div class="px-md mt-auto pt-4 border-t border-outline-variant">
+<div class="flex items-center gap-3 p-2 bg-surface-container rounded-xl">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary-fixed">
+<img alt="Barista portrait" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDa9kkiBwubqzUutPGt025KRtfJ8ukomcxVu2stVdZBzyG1gpXaBFCebwBpPXTEGrXPXDQgF7WN5obEXN3Y8q3mcq1vTxH_efiydjR-FugNhvUejGKHqU_kgRFwSqHdTvDJ8RPJLvxsAyZMRuiNiv7clpmKsArUbDx4lTMrGArDa3jrXvilbdJlaTsFU4eK85xxXOlPRvnADMXdJUfDlptgenEXPNAc5uF3lJ7FWhue4mRUgccDu4ZK98ltu-JQ2KnaLVJomG87ICY"/>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="font-label-lg text-label-lg text-on-surface truncate">Alex Rivera</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Lead Barista</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 flex flex-col min-w-0 transition-all duration-300 h-screen">
+<!-- TopNavBar -->
+<header class="w-full sticky top-0 bg-surface shadow-sm flex items-center px-md h-16 md:h-pos-touch-target z-40 border-b border-outline-variant">
+<button class="md:hidden mr-3 text-primary" onclick="toggleSidebar()">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full h-10 pl-10 pr-4 rounded-full border-none bg-surface-container-high focus:ring-2 focus:ring-primary/20 text-on-surface font-body-md" placeholder="Search menu items..." type="text"/>
+</div>
+<!-- Mobile Search Icon -->
+<button class="sm:hidden w-10 h-10 flex items-center justify-center rounded-full text-primary hover:bg-surface-container-high">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+<div class="flex items-center gap-2 md:gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-primary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<div class="hidden sm:flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-primary">Table 12</span>
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container rounded font-label-sm text-label-sm">Occupied</span>
+</div>
+<!-- Table ID only on very small screens -->
+<div class="sm:hidden bg-secondary-container text-on-secondary-container rounded px-2 py-1 font-label-sm">
+                T12
+            </div>
+</div>
+</header>
+<!-- POS Content Area -->
+<div class="flex-1 flex overflow-hidden relative">
+<!-- Left: Menu Selection -->
+<section class="flex-1 flex flex-col bg-surface p-4 md:p-md overflow-hidden">
+<!-- Categories Chips -->
+<div class="flex gap-2 md:gap-3 mb-4 md:mb-md overflow-x-auto no-scrollbar pb-2">
+<button class="px-5 md:px-6 h-10 md:h-pos-touch-target rounded-full bg-primary text-on-primary font-label-lg whitespace-nowrap active:scale-95 transition-all">All Items</button>
+<button class="px-5 md:px-6 h-10 md:h-pos-touch-target rounded-full bg-surface-container-highest text-on-surface-variant font-label-lg whitespace-nowrap hover:bg-secondary-container transition-all">Coffee</button>
+<button class="px-5 md:px-6 h-10 md:h-pos-touch-target rounded-full bg-surface-container-highest text-on-surface-variant font-label-lg whitespace-nowrap hover:bg-secondary-container transition-all">Tea &amp; Matcha</button>
+<button class="px-5 md:px-6 h-10 md:h-pos-touch-target rounded-full bg-surface-container-highest text-on-surface-variant font-label-lg whitespace-nowrap hover:bg-secondary-container transition-all">Snacks</button>
+<button class="px-5 md:px-6 h-10 md:h-pos-touch-target rounded-full bg-surface-container-highest text-on-surface-variant font-label-lg whitespace-nowrap hover:bg-secondary-container transition-all">Bakery</button>
+<button class="px-5 md:px-6 h-10 md:h-pos-touch-target rounded-full bg-surface-container-highest text-on-surface-variant font-label-lg whitespace-nowrap hover:bg-secondary-container transition-all">Desserts</button>
+</div>
+<!-- Product Grid -->
+<div class="flex-1 overflow-y-auto no-scrollbar grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-grid-gutter pb-24 md:pb-md">
+<!-- Product Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-2 md:p-3 shadow-warm pos-card-hover cursor-pointer border border-transparent hover:border-outline-variant transition-all">
+<div class="aspect-square rounded-lg overflow-hidden mb-2 md:mb-3">
+<img alt="Caffe Latte" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD86scuHbefLuCmeq-iiFyXU_e-tP2iHE4S3sgz4dfxWG-g2ULFcoS5F57v7q3iChja_6WfX-fsSeujcb7XKiXPRXFMwSqN8OJXg3n0-NMwcih_l2bV8lhPmmbVj3dwYUlo480UEsKnTpsBAlfP4T6XzQOLpoOBiVA7eSmLAcQlvzhHO0XMOlydvb1WzL-fqdpb3fZgltdCZyyIkbrFGnhQgiiwhbM8Ue4eZrilBPtHjldxN25ElUbl14rhiTIathXoqKcPzzCiL94"/>
+</div>
+<h3 class="font-label-lg text-label-lg text-on-surface mb-0.5 md:mb-1 truncate">Classic Latte</h3>
+<p class="font-headline-md text-headline-md text-primary">$4.50</p>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-2 md:p-3 shadow-warm pos-card-hover cursor-pointer border border-transparent hover:border-outline-variant transition-all">
+<div class="aspect-square rounded-lg overflow-hidden mb-2 md:mb-3">
+<img alt="Iced Mocha" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSJB6nauF5mAi2wPpU2imq_5TlZLeX2EhoILjNLXYkS8eGYHr5DbDZ8Dwivczzcjx1rdogu54qqgT_uYlmIZT5kj_OpioJ0fkIilLMKixp3pgnlpfUlkNml3eRQOp3QEL3ktnsmqmIE_MZdxXhWA2DuUJ6775zQa3fU2HGGVKmao08ifxNrlMEJWslwG0rMkAzUVj-Q0PaRpF8lU35US8vwJKpwLzxRcNvIff4Wa2-tD5TCe2CjYDE49od47OLE5k4iCeJEm1OrcM"/>
+</div>
+<h3 class="font-label-lg text-label-lg text-on-surface mb-0.5 md:mb-1 truncate">Iced Mocha</h3>
+<p class="font-headline-md text-headline-md text-primary">$5.75</p>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-2 md:p-3 shadow-warm pos-card-hover cursor-pointer border border-transparent hover:border-outline-variant transition-all">
+<div class="aspect-square rounded-lg overflow-hidden mb-2 md:mb-3">
+<img alt="Ceremonial Matcha" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMxNrx2eZQybMytdgykt5TaLMLxnWDo0cIdMXp89s00LCrvdvDpol8BmD6euibD3gwF6MwuVGk_bxpwdUrGRbNxU_BxBUawA1mKxBxBpg3XlDGVIwXSGxBW5nvHm0KUe45qkWd_E5g1V7HFoY-eUVaAfMQEPYNbZg-q_GFGO8naHwxkJ6zwQNgQPLV5DG7kUACtWAE4V3RuA-mqM-FglQ5CDb6PwAX_OlJ-2lOvom61F6-ik8pJf6DUulWkuDrOApEOUc0M7MH52I"/>
+</div>
+<h3 class="font-label-lg text-label-lg text-on-surface mb-0.5 md:mb-1 truncate">Matcha</h3>
+<p class="font-headline-md text-headline-md text-primary">$6.20</p>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-2 md:p-3 shadow-warm pos-card-hover cursor-pointer border border-transparent hover:border-outline-variant transition-all">
+<div class="aspect-square rounded-lg overflow-hidden mb-2 md:mb-3">
+<img alt="Croissant" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk5InlxjdAFQt-ekjcj3SDQjYT0GLtrWHpvFGEDX_trd9fxul2HKukuMuvOTHARNTxhFjzBpMIVO7IGNspSiquIf-0pbBByICQK2fzg4akf2U9dMcgFGEGajHRx8ujlsHOBAkRq_u0rzxPdKm515W0a9kLrllVPGp8rz_4gubXQ7OfltQcWc4TVQoLdOIeQ-aoVw4OfOwno7Qwk0_SqF7avRsFH8I7PBjRgDPUcZXrYDsJW7nkO5mCCdd5KCixhHe5j7mUFS5grcM"/>
+</div>
+<h3 class="font-label-lg text-label-lg text-on-surface mb-0.5 md:mb-1 truncate">Croissant</h3>
+<p class="font-headline-md text-headline-md text-primary">$3.25</p>
+</div>
+<!-- Product Card 5 -->
+<div class="bg-surface-container-lowest rounded-xl p-2 md:p-3 shadow-warm pos-card-hover cursor-pointer border border-transparent hover:border-outline-variant transition-all">
+<div class="aspect-square rounded-lg overflow-hidden mb-2 md:mb-3">
+<img alt="Cheesecake" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtVpEJjExWeqTJbroduA2fS41QBE6apVuH6OVYI8ch9TeECkddg_Hao4NHfh6MhtJKeSODjeX7zKyqF2w4KMFhPGhJ1PsPaqeIK811QxpJp-CjSm7od4c3ZhnoQwExhjiSavr4H34WyOpbYIfzFWU5_DgQWLTZgXHtGBBcw1kQ52EH8VBP8tsHw1hOR1XCTfLE_jJ6eQLTWKDfg9BJRp-Z8fkitCUxXYWZZiaSunDGxtTkqQcuOI5_5t4hKokeIZrzd3UT9bzEMQ0"/>
+</div>
+<h3 class="font-label-lg text-label-lg text-on-surface mb-0.5 md:mb-1 truncate">Cheesecake</h3>
+<p class="font-headline-md text-headline-md text-primary">$7.50</p>
+</div>
+<!-- Product Card 6 -->
+<div class="bg-surface-container-lowest rounded-xl p-2 md:p-3 shadow-warm pos-card-hover cursor-pointer border border-transparent hover:border-outline-variant transition-all">
+<div class="aspect-square rounded-lg overflow-hidden mb-2 md:mb-3">
+<img alt="Avocado Toast" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-n-nKRg21QUfjp_HNI4tFhzKB9abK3NCfxE3xEOCvPUjMb2mhRRhHMuRO9DbaxLs8JKw4l3a_-jvUPRZO8DRM3VlwP4QWqwgqYSJzxJ-hJG_K3J3gb2IITQ77zIEG-m4LVvfCz_0qH36ftjEqiQiI6wDrRUbu8zr5muhxYRbtj9Ud0JXQGgS0ylCuS6C-FlysZU7wtT4Jo--bN-4F0BLQgjS7BlsLEIs99AzQg0cQeqpiCWjjMmWl8kJj-M3wBOrQcb7y-0QiPvc"/>
+</div>
+<h3 class="font-label-lg text-label-lg text-on-surface mb-0.5 md:mb-1 truncate">Avocado Smash</h3>
+<p class="font-headline-md text-headline-md text-primary">$12.00</p>
+</div>
+<!-- Product Card 7 -->
+<div class="bg-surface-container-lowest rounded-xl p-2 md:p-3 shadow-warm pos-card-hover cursor-pointer border border-transparent hover:border-outline-variant transition-all">
+<div class="aspect-square rounded-lg overflow-hidden mb-2 md:mb-3">
+<img alt="Espresso" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-bkA4H_mv_eh1zHzFwKJlPh8bTb9jwB_IzIpVNO9Dhp5kzm1hkbWEcyADV8L-vbuaGX9NvvACN5rR9XqjR_YkN5U2CV6D1JKayCeaUYXz8Qwpa3EAhBSojzyD5iIe1K6J4wAL1atXBnzLbJtXkqr3VpEoTA2CoSODASkoIn69KPCKwxhe23Oobkeytq5Zm6BVVos6ajcXLFFOe9PRNQ0NPK5ZxTfiVb09Te-ficVpF1--SZt-jn8DLMMV5klfMy7_m0A91RAzPPg"/>
+</div>
+<h3 class="font-label-lg text-label-lg text-on-surface mb-0.5 md:mb-1 truncate">Double Espresso</h3>
+<p class="font-headline-md text-headline-md text-primary">$3.00</p>
+</div>
+<!-- Product Card 8 -->
+<div class="bg-surface-container-lowest rounded-xl p-2 md:p-3 shadow-warm pos-card-hover cursor-pointer border border-transparent hover:border-outline-variant transition-all">
+<div class="aspect-square rounded-lg overflow-hidden mb-2 md:mb-3">
+<img alt="Cookies" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlAZPXEWRCdr8Vy5m0aLbeIWpOBo1uqagxHRQfkkG3pdEvaAKMyCOj-7sh0e4crDZwfHbZKRUVoPGnAn8E6xP_ddiHMp98t9k9zuuMqwQ593_z_nl7NTQb-25wRmYjzBfBJrroih6OUmzzz8RIerhAfAkytXglGFeCmjHsUbatKvB5PVJzucgjXvn91fbMZnYZbMkDaOXjLlyocv1Tx5B3CWtVldJfnmLioz4Jrs0et30eMdQXOIgU_40ERQCd0X5SHaCFKEaFvks"/>
+</div>
+<h3 class="font-label-lg text-label-lg text-on-surface mb-0.5 md:mb-1 truncate">Sea Salt Cookie</h3>
+<p class="font-headline-md text-headline-md text-primary">$2.50</p>
+</div>
+</div>
+</section>
+<!-- Mobile Bottom Bar Trigger -->
+<div class="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-surface-container shadow-[0_-4px_10px_rgba(0,0,0,0.1)] z-50 flex items-center justify-between border-t border-outline-variant" id="mobile-order-trigger" onclick="toggleOrderPanel()">
+<div class="flex items-center gap-3">
+<div class="bg-primary text-on-primary w-8 h-8 rounded-full flex items-center justify-center font-label-lg">4</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-on-surface">View Order</span>
+<span class="font-headline-md text-primary">$23.31</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-6 h-10 rounded-full font-label-lg flex items-center gap-2">
+                Pay <span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+</button>
+</div>
+<!-- Right: Order Panel -->
+<section class="fixed inset-0 lg:static lg:flex lg:w-96 flex flex-col bg-surface-container-low border-l border-outline-variant shadow-lg z-[80] lg:z-30 h-full overflow-hidden" id="order-panel-mobile">
+<!-- Mobile Close Button -->
+<div class="lg:hidden p-4 flex items-center justify-between border-b border-outline-variant bg-surface">
+<h2 class="font-headline-md text-headline-md text-primary">Current Order</h2>
+<button class="text-primary" onclick="toggleOrderPanel()">
+<span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+<!-- Basket Header (Desktop/Large Mobile) -->
+<div class="hidden lg:block p-md border-b border-outline-variant">
+<div class="flex justify-between items-center mb-2">
+<h2 class="font-headline-md text-headline-md text-primary">Current Order</h2>
+<span class="px-2 py-1 bg-primary-fixed text-on-primary-fixed rounded-full font-label-sm text-label-sm">#1402</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Customer: Walk-in Guest</p>
+</div>
+<!-- Order Items List -->
+<div class="flex-1 overflow-y-auto no-scrollbar">
+<!-- Item Row 1 -->
+<div class="order-row p-4 md:p-md flex items-center justify-between group transition-colors">
+<div class="flex-1">
+<h4 class="font-label-lg text-label-lg text-on-surface">Caffe Latte</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Size: Large, Milk: Oat</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center bg-surface rounded-full border border-outline-variant h-8">
+<button class="w-8 h-full flex items-center justify-center text-primary hover:bg-primary-fixed rounded-l-full transition-colors"><span class="material-symbols-outlined text-sm">remove</span></button>
+<span class="w-8 text-center font-label-lg text-label-lg">2</span>
+<button class="w-8 h-full flex items-center justify-center text-primary hover:bg-primary-fixed rounded-r-full transition-colors"><span class="material-symbols-outlined text-sm">add</span></button>
+</div>
+<span class="font-label-lg text-label-lg text-primary w-16 text-right">$9.00</span>
+</div>
+</div>
+<!-- Item Row 2 -->
+<div class="order-row p-4 md:p-md flex items-center justify-between group transition-colors">
+<div class="flex-1">
+<h4 class="font-label-lg text-label-lg text-on-surface">Butter Croissant</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Warmed</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center bg-surface rounded-full border border-outline-variant h-8">
+<button class="w-8 h-full flex items-center justify-center text-primary hover:bg-primary-fixed rounded-l-full transition-colors"><span class="material-symbols-outlined text-sm">remove</span></button>
+<span class="w-8 text-center font-label-lg text-label-lg">1</span>
+<button class="w-8 h-full flex items-center justify-center text-primary hover:bg-primary-fixed rounded-r-full transition-colors"><span class="material-symbols-outlined text-sm">add</span></button>
+</div>
+<span class="font-label-lg text-label-lg text-primary w-16 text-right">$3.25</span>
+</div>
+</div>
+<!-- Item Row 3 -->
+<div class="order-row p-4 md:p-md flex items-center justify-between group transition-colors">
+<div class="flex-1">
+<h4 class="font-label-lg text-label-lg text-on-surface">Berry Cheesecake</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Extra berries</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center bg-surface rounded-full border border-outline-variant h-8">
+<button class="w-8 h-full flex items-center justify-center text-primary hover:bg-primary-fixed rounded-l-full transition-colors"><span class="material-symbols-outlined text-sm">remove</span></button>
+<span class="w-8 text-center font-label-lg text-label-lg">1</span>
+<button class="w-8 h-full flex items-center justify-center text-primary hover:bg-primary-fixed rounded-r-full transition-colors"><span class="material-symbols-outlined text-sm">add</span></button>
+</div>
+<span class="font-label-lg text-label-lg text-primary w-16 text-right">$7.50</span>
+</div>
+</div>
+</div>
+<!-- Order Totals & Actions -->
+<div class="p-4 md:p-md bg-surface-container shadow-[0_-4px_10px_rgba(0,0,0,0.05)] border-t border-outline-variant">
+<div class="space-y-2 mb-4 md:mb-md border-b border-outline-variant pb-4">
+<div class="flex justify-between font-label-lg text-on-surface-variant">
+<span>Subtotal</span>
+<span>$19.75</span>
+</div>
+<div class="flex justify-between font-label-lg text-on-surface-variant">
+<span>GST (18%)</span>
+<span>$3.56</span>
+</div>
+<div class="flex justify-between font-headline-md text-headline-md text-primary pt-2">
+<span>Total</span>
+<span>$23.31</span>
+</div>
+</div>
+<!-- Action Grid -->
+<div class="grid grid-cols-2 gap-3 mb-3">
+<button class="h-12 md:h-pos-touch-target flex items-center justify-center gap-2 rounded-xl bg-surface-container-highest text-primary font-label-lg hover:bg-secondary-container active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined">pause</span> <span class="hidden sm:inline">Hold</span>
+</button>
+<button class="h-12 md:h-pos-touch-target flex items-center justify-center gap-2 rounded-xl bg-error-container text-on-error-container font-label-lg hover:bg-error/10 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined">cancel</span> <span class="hidden sm:inline">Cancel</span>
+</button>
+</div>
+<div class="flex flex-col gap-3">
+<button class="h-12 md:h-pos-touch-target flex items-center justify-center gap-2 rounded-xl bg-primary text-on-primary font-label-lg hover:bg-primary-container active:scale-[0.98] transition-all" id="checkout-btn">
+<span class="material-symbols-outlined">receipt</span> Complete Order
+                    </button>
+<button class="h-12 md:h-pos-touch-target flex items-center justify-center gap-2 rounded-xl border border-primary text-primary font-label-lg hover:bg-primary/5 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined">print</span> Print KOT
+                    </button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Payment Overlay Modal -->
+<div class="fixed inset-0 bg-primary/20 backdrop-blur-sm z-[100] hidden items-center justify-center p-4" id="payment-overlay">
+<div class="bg-surface rounded-2xl p-6 md:p-lg shadow-2xl w-full max-w-md">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-md text-headline-md text-primary">Payment</h3>
+<button class="text-on-surface-variant" onclick="togglePayment()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="bg-surface-container-low p-4 md:p-md rounded-xl mb-4 md:mb-md">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-1">Amount Due</p>
+<p class="font-display-lg text-display-lg text-primary">$23.31</p>
+</div>
+<!-- Custom Touch-Friendly Numpad -->
+<div class="grid grid-cols-3 gap-2 md:gap-3 mb-6 md:mb-lg">
+<button class="h-14 md:h-16 rounded-xl bg-surface-container-high text-headline-md text-primary hover:bg-primary-fixed transition-all">1</button>
+<button class="h-14 md:h-16 rounded-xl bg-surface-container-high text-headline-md text-primary hover:bg-primary-fixed transition-all">2</button>
+<button class="h-14 md:h-16 rounded-xl bg-surface-container-high text-headline-md text-primary hover:bg-primary-fixed transition-all">3</button>
+<button class="h-14 md:h-16 rounded-xl bg-surface-container-high text-headline-md text-primary hover:bg-primary-fixed transition-all">4</button>
+<button class="h-14 md:h-16 rounded-xl bg-surface-container-high text-headline-md text-primary hover:bg-primary-fixed transition-all">5</button>
+<button class="h-14 md:h-16 rounded-xl bg-surface-container-high text-headline-md text-primary hover:bg-primary-fixed transition-all">6</button>
+<button class="h-14 md:h-16 rounded-xl bg-surface-container-high text-headline-md text-primary hover:bg-primary-fixed transition-all">7</button>
+<button class="h-14 md:h-16 rounded-xl bg-surface-container-high text-headline-md text-primary hover:bg-primary-fixed transition-all">8</button>
+<button class="h-14 md:h-16 rounded-xl bg-surface-container-high text-headline-md text-primary hover:bg-primary-fixed transition-all">9</button>
+<button class="h-14 md:h-16 rounded-xl bg-surface-container-high text-headline-md text-primary hover:bg-primary-fixed transition-all">.</button>
+<button class="h-14 md:h-16 rounded-xl bg-surface-container-high text-headline-md text-primary hover:bg-primary-fixed transition-all">0</button>
+<button class="h-14 md:h-16 rounded-xl bg-surface-container-high text-headline-md text-primary hover:bg-primary-fixed transition-all"><span class="material-symbols-outlined">backspace</span></button>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 h-12 md:h-pos-touch-target rounded-xl border border-outline text-on-surface font-label-lg" onclick="togglePayment()">Close</button>
+<button class="flex-[2] h-12 md:h-pos-touch-target rounded-xl bg-primary text-on-primary font-label-lg">Complete Transaction</button>
+</div>
+</div>
+</div>
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('mobile-sidebar-overlay');
+        const isOpen = !sidebar.classList.contains('-translate-x-full');
+        
+        if (isOpen) {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        } else {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        }
+    }
+
+    function toggleOrderPanel() {
+        const panel = document.getElementById('order-panel-mobile');
+        panel.classList.toggle('open');
+    }
+
+    function togglePayment() {
+        const overlay = document.getElementById('payment-overlay');
+        overlay.classList.toggle('hidden');
+        overlay.classList.toggle('flex');
+    }
+
+    // Toggle Payment Modal on Complete Order (or Generate Bill in previous version)
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if(checkoutBtn) {
+        checkoutBtn.addEventListener('click', togglePayment);
+    }
+
+    // Simple search logic simulation
+    const searchInput = document.querySelector('input[type="text"]');
+    if(searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.pos-card-hover');
+            cards.forEach(card => {
+                const title = card.querySelector('h3').innerText.toLowerCase();
+                if (title.includes(term)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    // Close panel on window resize if it gets back to desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= 1024) {
+            document.getElementById('order-panel-mobile').classList.remove('open');
+            document.getElementById('mobile-sidebar-overlay').classList.add('hidden');
+            document.getElementById('sidebar').classList.remove('-translate-x-full');
+        }
+    });
+</script>
+</body></html>

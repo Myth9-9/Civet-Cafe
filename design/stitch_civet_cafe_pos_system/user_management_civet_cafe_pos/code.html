@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Civet Cafe POS - User Management</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#e3beb8",
+                    "on-primary-fixed-variant": "#5b403c",
+                    "surface": "#fff8f6",
+                    "on-error": "#ffffff",
+                    "primary": "#271310",
+                    "on-tertiary-fixed": "#1b1c1b",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#181818",
+                    "on-surface-variant": "#504442",
+                    "on-tertiary-fixed-variant": "#464746",
+                    "on-secondary-fixed-variant": "#4c4542",
+                    "outline": "#827472",
+                    "on-surface": "#2c160e",
+                    "on-primary-fixed": "#2b1613",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#2c2d2c",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#ece0dc",
+                    "on-secondary-fixed": "#201a18",
+                    "surface-variant": "#ffdbd0",
+                    "surface-dim": "#fbd1c4",
+                    "surface-container": "#ffe9e3",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#959492",
+                    "secondary-fixed-dim": "#cfc4c0",
+                    "on-secondary-container": "#6b6360",
+                    "on-background": "#2c160e",
+                    "surface-container-low": "#fff1ed",
+                    "tertiary-fixed-dim": "#c7c6c4",
+                    "background": "#fff8f6",
+                    "inverse-on-surface": "#ffede8",
+                    "primary-container": "#3e2723",
+                    "primary-fixed": "#ffdad4",
+                    "secondary-fixed": "#ece0dc",
+                    "on-error-container": "#93000a",
+                    "on-primary-container": "#ae8d87",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fff8f6",
+                    "inverse-surface": "#442a22",
+                    "tertiary-fixed": "#e4e2e0",
+                    "secondary": "#655d5a",
+                    "outline-variant": "#d3c3c0",
+                    "surface-tint": "#745853",
+                    "surface-container-highest": "#ffdbd0",
+                    "surface-container-high": "#ffe2da",
+                    "primary-fixed-dim": "#e3beb8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "40px",
+                    "pos-touch-target": "48px",
+                    "xs": "4px",
+                    "md": "24px",
+                    "base": "8px",
+                    "sm": "12px",
+                    "grid-gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Lexend"],
+                    "label-lg": ["Inter"],
+                    "headline-md": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Lexend"],
+                    "headline-lg": ["Lexend"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #fff8f6;
+            color: #2c160e;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d3c3c0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 left-0 top-0 fixed bg-surface-container-low dark:bg-tertiary-container shadow-md z-50 border-r border-outline-variant">
+<div class="px-md py-lg flex flex-col gap-2">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">coffee</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-on-primary-fixed leading-tight">Civet Cafe</h1>
+<p class="font-body-md text-body-md text-on-surface-variant opacity-70">Downtown Branch</p>
+</div>
+</div>
+<nav class="flex flex-col">
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all hover:bg-secondary-container" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all hover:bg-secondary-container" href="#">
+<span class="material-symbols-outlined">table_restaurant</span>
+<span class="font-label-lg text-label-lg">Tables</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all hover:bg-secondary-container" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-lg text-label-lg">Orders</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all hover:bg-secondary-container" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-lg text-label-lg">Menu</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all hover:bg-secondary-container" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-lg text-label-lg">Billing</span>
+</a>
+<!-- Active Item -->
+<a class="bg-primary dark:bg-primary-fixed text-on-primary dark:text-on-primary-fixed rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-lg text-label-lg font-bold">Users</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all hover:bg-secondary-container" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-md border-t border-outline-variant">
+<div class="flex items-center gap-3 bg-surface-container-high rounded-xl p-3">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional high-resolution portrait of a cafe manager in her early 30s, wearing a clean linen apron over a neutral sweater. The lighting is soft and warm, reflecting the cozy artisanal cafe atmosphere. She has a friendly, confident expression, representing professional hospitality software users in a modern retail setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6MFkqUHNfSV3e4OfKGIJOOWcKlzbc0Ske3Bzc9mUJQ8E0QNQiGo_6xUHRQwQ078IFvhHX1CoLDnyCGIbzySt3ev5Yn6OqLcE7_e0AgHC56q7p-5tM_XDHAK6mp_ocTO7WiszrveFoMVsdvAtqlXuJfv0ky9ULgnLoa_XzY1XkQvnvTESSJAZT2FPdyEX6vxOV3x0hF6Rof1owCd86YK-hWfIrOh7ftFizvsUjBdrKd2W9MjqeEkAtgh6705I_k-qoc9Z_2bUUL6U"/>
+<div class="overflow-hidden">
+<p class="font-label-lg text-label-lg text-on-surface truncate">Elena V.</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-70">Administrator</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen bg-surface pb-20 md:pb-0">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center px-md h-pos-touch-target w-full z-40 bg-surface dark:bg-primary-container shadow-sm sticky top-0">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined md:hidden text-primary">menu</span>
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 font-body-md text-body-md w-64 focus:ring-2 focus:ring-primary focus:bg-white transition-all" placeholder="Search staff members..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-primary hover:bg-surface-container-high transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-1"></div>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-full font-label-lg text-label-lg hover:brightness-110 transition-all active:scale-95 shadow-sm">
+<span class="material-symbols-outlined text-base">person_add</span>
+<span class="hidden sm:inline">Add User</span>
+<span class="sm:hidden">Add</span>
+</button>
+</div>
+</header>
+<!-- Content Canvas -->
+<section class="p-md flex-1 overflow-y-auto custom-scrollbar">
+<!-- Page Header -->
+<div class="mb-lg flex flex-col gap-1">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">Staff Management</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Manage your team's access levels, update roles, and maintain secure access to the Civet Cafe POS system.</p>
+</div>
+<!-- Bento Layout for Analytics/Summary -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-md mb-lg">
+<div class="bg-surface-container p-md rounded-xl shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+<p class="font-label-lg text-label-lg text-on-surface-variant">Total Staff</p>
+<div class="flex items-end justify-between mt-2">
+<span class="font-display-lg text-display-lg text-primary text-2xl md:text-4xl">24</span>
+<span class="material-symbols-outlined text-primary-container opacity-20 text-3xl md:text-4xl">group</span>
+</div>
+</div>
+<div class="bg-surface-container p-md rounded-xl shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+<p class="font-label-lg text-label-lg text-on-surface-variant">Active Now</p>
+<div class="flex items-end justify-between mt-2">
+<span class="font-display-lg text-display-lg text-primary text-2xl md:text-4xl">8</span>
+<div class="w-3 h-3 bg-green-600 rounded-full animate-pulse mb-2"></div>
+</div>
+</div>
+<div class="bg-surface-container p-md rounded-xl shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+<p class="font-label-lg text-label-lg text-on-surface-variant">Pending Reviews</p>
+<div class="flex items-end justify-between mt-2">
+<span class="font-display-lg text-display-lg text-primary text-2xl md:text-4xl">2</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-20 text-3xl md:text-4xl">hourglass_empty</span>
+</div>
+</div>
+<div class="bg-primary-container p-md rounded-xl shadow-sm flex flex-col justify-between text-on-primary-container">
+<p class="font-label-lg text-label-lg text-on-primary-container opacity-80">Access Requests</p>
+<div class="flex items-end justify-between mt-2">
+<span class="font-display-lg text-display-lg text-white text-2xl md:text-4xl">0</span>
+<span class="material-symbols-outlined text-white opacity-40 text-3xl md:text-4xl">verified_user</span>
+</div>
+</div>
+</div>
+<!-- Staff List Card -->
+<div class="bg-white rounded-2xl shadow-lg border border-outline-variant/30 overflow-hidden mb-lg">
+<div class="px-md py-4 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-label-lg text-label-lg text-primary uppercase tracking-wider">Directory</h3>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+</button>
+<button class="p-2 rounded-lg border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">download</span>
+</button>
+</div>
+</div>
+<!-- Desktop Table View -->
+<div class="hidden md:block overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest text-left">
+<th class="px-md py-4 font-label-lg text-label-lg text-on-surface-variant border-b border-outline-variant/50">User</th>
+<th class="px-md py-4 font-label-lg text-label-lg text-on-surface-variant border-b border-outline-variant/50">Role</th>
+<th class="px-md py-4 font-label-lg text-label-lg text-on-surface-variant border-b border-outline-variant/50">Assigned Branch</th>
+<th class="px-md py-4 font-label-lg text-label-lg text-on-surface-variant border-b border-outline-variant/50">Status</th>
+<th class="px-md py-4 font-label-lg text-label-lg text-on-surface-variant border-b border-outline-variant/50 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- User Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A high-quality square headshot of a professional male barista in his late 20s" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgbSpyFU19gMG4VE8k4ujsjAn18GOgmRoIsp0s2dnvMxwmqsXsEv9TtlaI5a_EdmWmNiLAp6NkQOSIQiPyoDOv4OV9sxkLD47NhANeuBDvEefy1uhFrC2-rEeHt8GZSJzEK95SOu6rFOzu7vyqEkRsUzhHszCodBDPQ08SBQgHhlAmxOOM2waExbG86p81LBsDxuFwLXXMGt0GH1-1RxiDVlpApn7e45VORHB4HvatswS1KymZyov3B1grauHOC-TL76T3S8FUNwM"/>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Marcus Chen</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">marcus.c@civetcafe.com</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full font-label-sm text-label-sm">Manager</span>
+</td>
+<td class="px-md py-4">
+<p class="font-body-md text-body-md text-on-surface">Downtown</p>
+</td>
+<td class="px-md py-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-green-500"></div>
+<span class="font-label-sm text-label-sm text-on-surface">Active</span>
+</div>
+</td>
+<td class="px-md py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-primary-fixed-dim rounded-lg text-primary transition-colors" title="Reset Password">
+<span class="material-symbols-outlined">lock_reset</span>
+</button>
+<button class="p-2 hover:bg-primary-fixed-dim rounded-lg text-primary transition-colors" title="Edit Permissions">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors" title="Delete User">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- User Row 2 (Zebra) -->
+<tr class="bg-[#F5F0EE] hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Close-up portrait of a young professional chef" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnSWVAaEmweg7sgksIWzo_wkyP0_kvTzmpq_KGD7EohD3zw5xEyecw5plpdKrmvjSYKdWXFGLEOoomSoFRC3fvbcGVigZ2MNffbw5SgXO_-TEIAE2dQaJ77m_8lH9x2hVFx72IwOm7aWklMASlK01lNjha06rNPgI5SRvAaM3XKfR9nrK0V25PT--FvAbFuNIEUjbgieDBJLzr7vh-NytykQ7EIPicYxv9Avxh_jq7InL_sl0vIqQ-LXGcoQ7Ou3Rrh9YlcRNMs-g"/>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Sarah Miller</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">s.miller@civetcafe.com</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded-full font-label-sm text-label-sm">Chef</span>
+</td>
+<td class="px-md py-4">
+<p class="font-body-md text-body-md text-on-surface">North Station</p>
+</td>
+<td class="px-md py-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-green-500"></div>
+<span class="font-label-sm text-label-sm text-on-surface">Active</span>
+</div>
+</td>
+<td class="px-md py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-primary-fixed-dim rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined">lock_reset</span>
+</button>
+<button class="p-2 hover:bg-primary-fixed-dim rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- More rows preserved... -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A studio portrait of a friendly male waiter" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEpDVQLHSJq1LamWaLj8Pa8QW22Pu0mhi-z9BDomEP3CuAAlLJhmN_UGlu0_7Ub5C1XN5woeyAviHCIhZPZgZeL7IMYc_BNASmmESwaAVpkZiYcpiZDo_8cKGPK91_vKMlsYZ9NUEu7MKd2642Qr6iMOYjjXV4hJGQ6B_l7kr9kEtI_dtXTAZOJK33Qo8DR05NtMGdcWUgKMqw6ozx5R_h49-3Rauz9bJLF3xn8wRuhrGp8mR5LOxN1qnzp0GYtwJ1bXtbTyqcZxI"/>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">David Wilson</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">d.wilson@civetcafe.com</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full font-label-sm text-label-sm">Waitstaff</span>
+</td>
+<td class="px-md py-4">
+<p class="font-body-md text-body-md text-on-surface">Downtown</p>
+</td>
+<td class="px-md py-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Offline</span>
+</div>
+</td>
+<td class="px-md py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-primary-fixed-dim rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined">lock_reset</span>
+</button>
+<button class="p-2 hover:bg-primary-fixed-dim rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="bg-[#F5F0EE] hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Modern professional portrait of a senior administrator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrbCeI2n_VB8Qf4oDdbQzsPKizHn2rjrsUgrNESc0BImgIw4E5vt5N3ciY4_CX1zpz1bMpp3JEoZSjpu47D7Gdq5QyDBSvxrvcKYzLIYjYwoEWBiv92L_H64Fm2CAdlcVxpUtSSEZJSJVDNuBXZjpnQxPEF26HwF6051EEedbDvNSxPDPgfS5z7zIQQwk_a95ozptjK_hneQb67yZhbDsd-t-2Y7M_lsW5j4UGzGb0fQwv0IA81VeFaDQdpwodKpT9ZnMbTodb5eA"/>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">James Cooper</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">j.cooper@civetcafe.com</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 bg-tertiary-container text-on-tertiary-container border border-outline/20 rounded-full font-label-sm text-label-sm">Admin</span>
+</td>
+<td class="px-md py-4">
+<p class="font-body-md text-body-md text-on-surface">Global Access</p>
+</td>
+<td class="px-md py-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-green-500"></div>
+<span class="font-label-sm text-label-sm text-on-surface">Active</span>
+</div>
+</td>
+<td class="px-md py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-primary-fixed-dim rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined">lock_reset</span>
+</button>
+<button class="p-2 hover:bg-primary-fixed-dim rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Mobile Card View -->
+<div class="md:hidden flex flex-col divide-y divide-outline-variant/30">
+<!-- Mobile Card 1 -->
+<div class="p-md flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgbSpyFU19gMG4VE8k4ujsjAn18GOgmRoIsp0s2dnvMxwmqsXsEv9TtlaI5a_EdmWmNiLAp6NkQOSIQiPyoDOv4OV9sxkLD47NhANeuBDvEefy1uhFrC2-rEeHt8GZSJzEK95SOu6rFOzu7vyqEkRsUzhHszCodBDPQ08SBQgHhlAmxOOM2waExbG86p81LBsDxuFwLXXMGt0GH1-1RxiDVlpApn7e45VORHB4HvatswS1KymZyov3B1grauHOC-TL76T3S8FUNwM"/>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Marcus Chen</p>
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded-full text-[10px] uppercase font-bold">Manager</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<div class="w-2 h-2 rounded-full bg-green-500"></div>
+<span class="font-label-sm text-label-sm">Active</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 text-sm">
+<div>
+<p class="text-on-surface-variant text-[11px] uppercase tracking-tight">Branch</p>
+<p class="text-on-surface">Downtown</p>
+</div>
+<div>
+<p class="text-on-surface-variant text-[11px] uppercase tracking-tight">Email</p>
+<p class="text-on-surface truncate">marcus.c@civetcafe.com</p>
+</div>
+</div>
+<div class="flex gap-2 pt-2 border-t border-outline-variant/30">
+<button class="flex-1 py-2 flex items-center justify-center gap-2 rounded-lg bg-surface-container-high text-primary text-sm font-medium">
+<span class="material-symbols-outlined text-sm">edit</span> Edit
+                            </button>
+<button class="flex-1 py-2 flex items-center justify-center gap-2 rounded-lg bg-surface-container-high text-primary text-sm font-medium">
+<span class="material-symbols-outlined text-sm">lock_reset</span> Reset
+                            </button>
+</div>
+</div>
+<!-- Mobile Card 2 -->
+<div class="p-md flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnSWVAaEmweg7sgksIWzo_wkyP0_kvTzmpq_KGD7EohD3zw5xEyecw5plpdKrmvjSYKdWXFGLEOoomSoFRC3fvbcGVigZ2MNffbw5SgXO_-TEIAE2dQaJ77m_8lH9x2hVFx72IwOm7aWklMASlK01lNjha06rNPgI5SRvAaM3XKfR9nrK0V25PT--FvAbFuNIEUjbgieDBJLzr7vh-NytykQ7EIPicYxv9Avxh_jq7InL_sl0vIqQ-LXGcoQ7Ou3Rrh9YlcRNMs-g"/>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Sarah Miller</p>
+<span class="px-2 py-0.5 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-[10px] uppercase font-bold">Chef</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<div class="w-2 h-2 rounded-full bg-green-500"></div>
+<span class="font-label-sm text-label-sm">Active</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 text-sm">
+<div>
+<p class="text-on-surface-variant text-[11px] uppercase tracking-tight">Branch</p>
+<p class="text-on-surface">North Station</p>
+</div>
+<div>
+<p class="text-on-surface-variant text-[11px] uppercase tracking-tight">Email</p>
+<p class="text-on-surface truncate">s.miller@civetcafe.com</p>
+</div>
+</div>
+<div class="flex gap-2 pt-2 border-t border-outline-variant/30">
+<button class="flex-1 py-2 flex items-center justify-center gap-2 rounded-lg bg-surface-container-high text-primary text-sm font-medium">
+<span class="material-symbols-outlined text-sm">edit</span> Edit
+                            </button>
+<button class="flex-1 py-2 flex items-center justify-center gap-2 rounded-lg bg-surface-container-high text-primary text-sm font-medium">
+<span class="material-symbols-outlined text-sm">lock_reset</span> Reset
+                            </button>
+</div>
+</div>
+</div>
+<div class="px-md py-4 bg-surface-container-lowest border-t border-outline-variant flex items-center justify-between">
+<p class="font-label-sm text-label-sm text-on-surface-variant">Showing 4 of 24</p>
+<div class="flex gap-2">
+<button class="px-3 py-1 rounded-lg border border-outline-variant hover:bg-surface-container text-on-surface-variant disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="px-3 py-1 rounded-lg border border-outline-variant hover:bg-surface-container text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Permission Matrix & Activity -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-outline-variant/30 p-md flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-md">
+<h3 class="font-headline-md text-headline-md text-primary">Role Permissions</h3>
+<button class="text-primary font-label-lg text-label-lg hover:underline">Edit Matrix</button>
+</div>
+<div class="overflow-x-auto -mx-md px-md md:mx-0 md:px-0">
+<table class="w-full text-left min-w-[400px]">
+<thead>
+<tr class="border-b border-outline-variant">
+<th class="py-3 font-label-lg text-label-lg text-on-surface">Capability</th>
+<th class="py-3 px-2 font-label-lg text-label-lg text-center">Admin</th>
+<th class="py-3 px-2 font-label-lg text-label-lg text-center">Mgr</th>
+<th class="py-3 px-2 font-label-lg text-label-lg text-center">Staff</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<tr>
+<td class="py-3 font-body-md text-body-md">Modify Inventory</td>
+<td class="py-3 text-center"><span class="material-symbols-outlined text-green-600">check_circle</span></td>
+<td class="py-3 text-center"><span class="material-symbols-outlined text-green-600">check_circle</span></td>
+<td class="py-3 text-center"><span class="material-symbols-outlined text-outline">cancel</span></td>
+</tr>
+<tr>
+<td class="py-3 font-body-md text-body-md">Issue Refunds</td>
+<td class="py-3 text-center"><span class="material-symbols-outlined text-green-600">check_circle</span></td>
+<td class="py-3 text-center"><span class="material-symbols-outlined text-green-600">check_circle</span></td>
+<td class="py-3 text-center"><span class="material-symbols-outlined text-outline">cancel</span></td>
+</tr>
+<tr>
+<td class="py-3 font-body-md text-body-md">Access Financials</td>
+<td class="py-3 text-center"><span class="material-symbols-outlined text-green-600">check_circle</span></td>
+<td class="py-3 text-center"><span class="material-symbols-outlined text-outline">cancel</span></td>
+<td class="py-3 text-center"><span class="material-symbols-outlined text-outline">cancel</span></td>
+</tr>
+<tr>
+<td class="py-3 font-body-md text-body-md">Close Register</td>
+<td class="py-3 text-center"><span class="material-symbols-outlined text-green-600">check_circle</span></td>
+<td class="py-3 text-center"><span class="material-symbols-outlined text-green-600">check_circle</span></td>
+<td class="py-3 text-center"><span class="material-symbols-outlined text-green-600">check_circle</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Recent Security Activity -->
+<div class="bg-surface-container-low rounded-2xl p-md border border-outline-variant/30">
+<h3 class="font-label-lg text-label-lg text-primary uppercase tracking-wider mb-md">Audit Log</h3>
+<div class="flex flex-col gap-4">
+<div class="flex gap-3">
+<div class="mt-1">
+<span class="material-symbols-outlined text-primary text-xl">key</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Password Reset</p>
+<p class="font-body-md text-body-md text-on-surface-variant leading-tight">Elena V. reset Sarah Miller's password.</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-60 mt-1">2 hours ago</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="mt-1">
+<span class="material-symbols-outlined text-primary text-xl">person_add</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">New User Added</p>
+<p class="font-body-md text-body-md text-on-surface-variant leading-tight">Marcus Chen added David Wilson (Waitstaff).</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-60 mt-1">Yesterday, 4:15 PM</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="mt-1">
+<span class="material-symbols-outlined text-error text-xl">gpp_maybe</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Failed Login</p>
+<p class="font-body-md text-body-md text-on-surface-variant leading-tight text-sm">3 failed attempts for user: k.smith</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-60 mt-1">Sep 24, 10:20 AM</p>
+</div>
+</div>
+<button class="w-full py-3 mt-2 rounded-xl border border-dashed border-outline text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container transition-colors">
+                            View Full Audit Trail
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container h-16 flex items-center justify-around z-50 px-4 border-t border-outline-variant shadow-lg">
+<button class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-[10px]">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-sm text-[10px]">Orders</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-sm text-[10px] font-bold">Users</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-[10px]">More</span>
+</button>
+</nav>
+<!-- Simple Add User Modal Placeholder -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] hidden items-center justify-center p-md" id="addUserModal">
+<div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden scale-95 transition-transform duration-300">
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-headline-md text-headline-md text-primary">New Staff Member</h3>
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleModal(false)">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-md space-y-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">First Name</label>
+<input class="rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary py-2" type="text"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Last Name</label>
+<input class="rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary py-2" type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Email Address</label>
+<input class="rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary py-2" type="email"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Role</label>
+<select class="rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary py-2">
+<option>Waitstaff</option>
+<option>Manager</option>
+<option>Chef</option>
+<option>Admin</option>
+</select>
+</div>
+<div class="pt-4 flex flex-col-reverse sm:flex-row gap-3 justify-end">
+<button class="w-full sm:w-auto px-6 py-2 rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container transition-colors" onclick="toggleModal(false)">Cancel</button>
+<button class="w-full sm:w-auto px-6 py-2 rounded-full font-label-lg text-label-lg bg-primary text-on-primary shadow-sm hover:brightness-110 transition-all">Save Member</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+        function toggleModal(show) {
+            const modal = document.getElementById('addUserModal');
+            if (show) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => {
+                    modal.querySelector('div').classList.remove('scale-95');
+                    modal.querySelector('div').classList.add('scale-100');
+                }, 10);
+            } else {
+                modal.querySelector('div').classList.remove('scale-100');
+                modal.querySelector('div').classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }, 200);
+            }
+        }
+
+        // Attach to main Add User buttons (header and desktop)
+        document.querySelectorAll('button').forEach(btn => {
+            if (btn.innerText.includes('person_add') || btn.innerText.includes('Add User')) {
+                btn.addEventListener('click', () => toggleModal(true));
+            }
+        });
+        
+        // Micro-interactions for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+            btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+            btn.addEventListener('mouseleave', () => btn.classList.remove('scale-95'));
+        });
+    </script>
+</body></html>

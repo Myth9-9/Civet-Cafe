@@ -1,0 +1,56 @@
+name: Database Migrations
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+      run_seed:
+        description: "Run seed script after migration"
+        required: false
+        default: false
+        type: boolean
+
+env:
+  PYTHON_VERSION: "3.12"
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run Alembic migrations (${{ github.event.inputs.environment }})
+        run: alembic upgrade head
+        env:
+          DATABASE_URL: ${{ secrets[format('DATABASE_URL_{0}', github.event.inputs.environment)] }}
+          SUPABASE_URL: ${{ secrets[format('SUPABASE_URL_{0}', github.event.inputs.environment)] }}
+          SUPABASE_ANON_KEY: ${{ secrets[format('SUPABASE_ANON_KEY_{0}', github.event.inputs.environment)] }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets[format('SUPABASE_SERVICE_ROLE_KEY_{0}', github.event.inputs.environment)] }}
+          JWT_SECRET_KEY: ${{ secrets[format('JWT_SECRET_KEY_{0}', github.event.inputs.environment)] }}
+
+      - name: Seed database
+        if: github.event.inputs.run_seed == 'true'
+        run: python scripts/seed.py
+        env:
+          DATABASE_URL: ${{ secrets[format('DATABASE_URL_{0}', github.event.inputs.environment)] }}

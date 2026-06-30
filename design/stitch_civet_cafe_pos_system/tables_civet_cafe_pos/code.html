@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Civet Cafe POS - Table Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#e3beb8",
+                    "on-primary-fixed-variant": "#5b403c",
+                    "surface": "#fff8f6",
+                    "on-error": "#ffffff",
+                    "primary": "#271310",
+                    "on-tertiary-fixed": "#1b1c1b",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#181818",
+                    "on-surface-variant": "#504442",
+                    "on-tertiary-fixed-variant": "#464746",
+                    "on-secondary-fixed-variant": "#4c4542",
+                    "outline": "#827472",
+                    "on-surface": "#2c160e",
+                    "on-primary-fixed": "#2b1613",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#2c2d2c",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#ece0dc",
+                    "on-secondary-fixed": "#201a18",
+                    "surface-variant": "#ffdbd0",
+                    "surface-dim": "#fbd1c4",
+                    "surface-container": "#ffe9e3",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#959492",
+                    "secondary-fixed-dim": "#cfc4c0",
+                    "on-secondary-container": "#6b6360",
+                    "on-background": "#2c160e",
+                    "surface-container-low": "#fff1ed",
+                    "tertiary-fixed-dim": "#c7c6c4",
+                    "background": "#fff8f6",
+                    "inverse-on-surface": "#ffede8",
+                    "primary-container": "#3e2723",
+                    "primary-fixed": "#ffdad4",
+                    "secondary-fixed": "#ece0dc",
+                    "on-error-container": "#93000a",
+                    "on-primary-container": "#ae8d87",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fff8f6",
+                    "inverse-surface": "#442a22",
+                    "tertiary-fixed": "#e4e2e0",
+                    "secondary": "#655d5a",
+                    "outline-variant": "#d3c3c0",
+                    "surface-tint": "#745853",
+                    "surface-container-highest": "#ffdbd0",
+                    "surface-container-high": "#ffe2da",
+                    "primary-fixed-dim": "#e3beb8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "40px",
+                    "pos-touch-target": "48px",
+                    "xs": "4px",
+                    "md": "24px",
+                    "base": "8px",
+                    "sm": "12px",
+                    "grid-gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Lexend"],
+                    "label-lg": ["Inter"],
+                    "headline-md": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Lexend"],
+                    "headline-lg": ["Lexend"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        body {
+            background-color: #fff8f6;
+            color: #2c160e;
+        }
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        }
+        @media (min-width: 768px) {
+            .table-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+        }
+        .custom-shadow {
+            box-shadow: 0 4px 12px rgba(62, 39, 35, 0.08);
+        }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        .transition-table {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .transition-table:active {
+            transform: scale(0.95);
+        }
+        /* Mobile Sidebar Overlay */
+        #sidebar.active {
+            transform: translateX(0);
+        }
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
+        }
+        @media (min-width: 768px) {
+            #sidebar {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden h-screen flex">
+<!-- Mobile Overlay -->
+<div class="fixed inset-0 bg-black/50 z-40 hidden" id="sidebar-overlay"></div>
+<!-- SIDE NAV BAR -->
+<aside class="flex flex-col h-full py-md border-r border-outline-variant bg-surface-container-low dark:bg-tertiary-container shadow-md w-64 fixed left-0 top-0 z-50" id="sidebar">
+<div class="px-6 mb-8 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined filled-icon">coffee</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-on-primary-fixed leading-none">Civet Cafe</h1>
+<span class="text-label-sm text-secondary">Downtown Branch</span>
+</div>
+</div>
+<button class="md:hidden p-1 text-secondary" id="close-sidebar">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="bg-primary dark:bg-primary-fixed text-on-primary dark:text-on-primary-fixed rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined filled-icon">table_restaurant</span>
+<span class="font-label-lg text-label-lg">Tables</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-lg text-label-lg">Orders</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-lg text-label-lg">Menu</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-lg text-label-lg">Billing</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Users</span>
+</a>
+<div class="mt-auto">
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</div>
+</nav>
+</aside>
+<!-- MAIN CONTENT AREA -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen overflow-y-auto">
+<!-- TOP APP BAR -->
+<header class="flex flex-col sm:flex-row justify-between items-center px-4 md:px-md py-4 sm:h-pos-touch-target w-full z-40 bg-surface dark:bg-primary-container shadow-sm sticky top-0 gap-4">
+<div class="flex items-center justify-between w-full sm:w-auto gap-4">
+<div class="flex items-center gap-2">
+<button class="md:hidden p-2 rounded-full hover:bg-surface-container-high transition-colors" id="open-sidebar">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary dark:text-on-primary-fixed whitespace-nowrap">Table Management</h2>
+</div>
+<div class="sm:hidden">
+<button class="p-2 rounded-full text-primary">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+</div>
+<div class="w-full sm:flex-1 sm:max-w-md">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-outline">search</span>
+<input class="w-full h-10 pl-10 pr-4 bg-surface-container-low border-none rounded-full focus:ring-2 focus:ring-primary/20 text-body-md transition-all shadow-sm sm:shadow-none" placeholder="Search tables or sections..." type="text"/>
+</div>
+</div>
+<div class="hidden sm:flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-primary">account_circle</span>
+</div>
+</div>
+</header>
+<!-- DASHBOARD CONTENT -->
+<div class="p-4 md:p-md flex flex-col gap-6">
+<!-- Quick Filters -->
+<div class="flex items-center gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar">
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-primary text-on-primary font-label-lg">All (24)</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg">Available (12)</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg">Occupied (8)</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg">Reserved (4)</button>
+</div>
+<!-- Table Grid -->
+<div class="table-grid gap-4 md:gap-grid-gutter">
+<!-- Table Card - Occupied -->
+<div class="transition-table custom-shadow bg-surface-container border border-outline-variant rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2">
+<span class="flex h-2.5 w-2.5 rounded-full bg-error status-pulse"></span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-primary">T-01</span>
+<span class="text-label-sm text-secondary">4 Seats</span>
+</div>
+<div class="py-2 border-y border-outline-variant/30">
+<p class="text-label-sm text-on-surface-variant mb-1">Current Order:</p>
+<p class="font-label-lg text-primary truncate">2x Iced Latte, 1x Croissant</p>
+<p class="text-label-sm font-bold text-primary mt-1">$32.50</p>
+</div>
+<div class="flex items-center justify-between text-label-sm text-secondary">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> 45m</span>
+<button class="text-primary font-label-lg">View</button>
+</div>
+</div>
+<!-- Table Card - Available -->
+<div class="transition-table custom-shadow bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col gap-3 relative hover:border-primary/30 cursor-pointer">
+<div class="absolute top-0 right-0 p-2">
+<span class="flex h-2.5 w-2.5 rounded-full bg-green-500"></span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-primary">T-02</span>
+<span class="text-label-sm text-secondary">2 Seats</span>
+</div>
+<div class="flex-1 flex items-center justify-center py-6">
+<span class="material-symbols-outlined text-outline-variant text-4xl">add_circle</span>
+</div>
+<div class="text-center">
+<span class="text-label-sm text-secondary">Available</span>
+</div>
+</div>
+<!-- Table Card - Reserved -->
+<div class="transition-table custom-shadow bg-surface-container-low border border-outline-variant rounded-xl p-4 flex flex-col gap-3 relative">
+<div class="absolute top-0 right-0 p-2">
+<span class="flex h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-primary">T-03</span>
+<span class="text-label-sm text-secondary">6 Seats</span>
+</div>
+<div class="py-2 border-y border-outline-variant/30">
+<p class="text-label-sm text-on-surface-variant mb-1">Reservation:</p>
+<p class="font-label-lg text-primary">Smith Family</p>
+<p class="text-label-sm text-secondary mt-1">19:30 PM</p>
+</div>
+<div class="flex items-center justify-between text-label-sm text-secondary">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">event</span> Today</span>
+<button class="text-primary font-label-lg">Check-in</button>
+</div>
+</div>
+<!-- More tables for grid visual -->
+<div class="transition-table custom-shadow bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col gap-3 relative cursor-pointer">
+<div class="absolute top-0 right-0 p-2"><span class="flex h-2.5 w-2.5 rounded-full bg-green-500"></span></div>
+<div class="flex items-center justify-between"><span class="font-headline-md text-primary">T-04</span><span class="text-label-sm text-secondary">2 Seats</span></div>
+<div class="flex-1 flex items-center justify-center py-6"><span class="material-symbols-outlined text-outline-variant text-4xl">add_circle</span></div>
+</div>
+<div class="transition-table custom-shadow bg-surface-container border border-outline-variant rounded-xl p-4 flex flex-col gap-3 relative">
+<div class="absolute top-0 right-0 p-2"><span class="flex h-2.5 w-2.5 rounded-full bg-error status-pulse"></span></div>
+<div class="flex items-center justify-between"><span class="font-headline-md text-primary">T-05</span><span class="text-label-sm text-secondary">4 Seats</span></div>
+<div class="py-2 border-y border-outline-variant/30"><p class="font-label-lg text-primary truncate">1x Cappuccino...</p><p class="text-label-sm font-bold text-primary mt-1">$12.00</p></div>
+</div>
+<div class="transition-table custom-shadow bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col gap-3 relative cursor-pointer">
+<div class="absolute top-0 right-0 p-2"><span class="flex h-2.5 w-2.5 rounded-full bg-green-500"></span></div>
+<div class="flex items-center justify-between"><span class="font-headline-md text-primary">T-06</span><span class="text-label-sm text-secondary">2 Seats</span></div>
+<div class="flex-1 flex items-center justify-center py-6"><span class="material-symbols-outlined text-outline-variant text-4xl">add_circle</span></div>
+</div>
+</div>
+</div>
+<!-- Mobile Bottom Actions -->
+<div class="md:hidden fixed bottom-6 right-6 z-40">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</main>
+<script>
+    // Basic interaction for mobile sidebar
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const openBtn = document.getElementById('open-sidebar');
+    const closeBtn = document.getElementById('close-sidebar');
+
+    const toggleSidebar = (show) => {
+        if (show) {
+            sidebar.classList.add('active');
+            overlay.classList.remove('hidden');
+        } else {
+            sidebar.classList.remove('active');
+            overlay.classList.add('hidden');
+        }
+    };
+
+    openBtn.addEventListener('click', () => toggleSidebar(true));
+    closeBtn.addEventListener('click', () => toggleSidebar(false));
+    overlay.addEventListener('click', () => toggleSidebar(false));
+
+    // Handle resize to reset sidebar if switched to desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= 768) {
+            overlay.classList.add('hidden');
+        }
+    });
+</script>
+</body></html>

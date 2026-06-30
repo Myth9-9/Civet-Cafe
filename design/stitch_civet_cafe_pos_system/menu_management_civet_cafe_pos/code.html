@@ -1,0 +1,419 @@
+<html class="light" lang="en"><head></head><body class="font-body-md text-body-md overflow-x-hidden md:overflow-hidden">```html
+
+
+
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Civet Cafe POS - Menu Management</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#e3beb8",
+                    "on-primary-fixed-variant": "#5b403c",
+                    "surface": "#fff8f6",
+                    "on-error": "#ffffff",
+                    "primary": "#271310",
+                    "on-tertiary-fixed": "#1b1c1b",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#181818",
+                    "on-surface-variant": "#504442",
+                    "on-tertiary-fixed-variant": "#464746",
+                    "on-secondary-fixed-variant": "#4c4542",
+                    "outline": "#827472",
+                    "on-surface": "#2c160e",
+                    "on-primary-fixed": "#2b1613",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#2c2d2c",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#ece0dc",
+                    "on-secondary-fixed": "#201a18",
+                    "surface-variant": "#ffdbd0",
+                    "surface-dim": "#fbd1c4",
+                    "surface-container": "#ffe9e3",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#959492",
+                    "secondary-fixed-dim": "#cfc4c0",
+                    "on-secondary-container": "#6b6360",
+                    "on-background": "#2c160e",
+                    "surface-container-low": "#fff1ed",
+                    "tertiary-fixed-dim": "#c7c6c4",
+                    "background": "#fff8f6",
+                    "inverse-on-surface": "#ffede8",
+                    "primary-container": "#3e2723",
+                    "primary-fixed": "#ffdad4",
+                    "secondary-fixed": "#ece0dc",
+                    "on-error-container": "#93000a",
+                    "on-primary-container": "#ae8d87",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fff8f6",
+                    "inverse-surface": "#442a22",
+                    "tertiary-fixed": "#e4e2e0",
+                    "secondary": "#655d5a",
+                    "outline-variant": "#d3c3c0",
+                    "surface-tint": "#745853",
+                    "surface-container-highest": "#ffdbd0",
+                    "surface-container-high": "#ffe2da",
+                    "primary-fixed-dim": "#e3beb8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "40px",
+                    "pos-touch-target": "48px",
+                    "xs": "4px",
+                    "md": "24px",
+                    "base": "8px",
+                    "sm": "12px",
+                    "grid-gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Lexend"],
+                    "label-lg": ["Inter"],
+                    "headline-md": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Lexend"],
+                    "headline-lg": ["Lexend"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fff8f6;
+            color: #2c160e;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d3c3c0;
+            border-radius: 10px;
+        }
+        .order-zebra:nth-child(even) {
+            background-color: #F5F0EE;
+        }
+        .modal-overlay {
+            background-color: rgba(62, 39, 35, 0.4);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+<!-- Mobile Sidebar Backdrop -->
+<div class="fixed inset-0 bg-black/50 z-[45] hidden md:hidden" id="mobileSidebarBackdrop"></div>
+<!-- Sidebar Navigation Shell -->
+<aside class="fixed flex flex-col h-screen w-64 left-0 top-0 bg-surface-container-low dark:bg-tertiary-container shadow-md z-50 border-r border-outline-variant -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
+<div class="px-md py-lg flex flex-col items-center gap-2">
+<div class="w-16 h-16 rounded-full overflow-hidden mb-2 bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-4xl">coffee</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary text-center">Civet Cafe</h1>
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest text-center">Downtown Branch</p>
+</div>
+<nav class="flex-1 px-2 space-y-1 overflow-y-auto custom-scrollbar">
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">table_restaurant</span>
+<span class="font-label-lg text-label-lg">Tables</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-lg text-label-lg">Orders</span>
+</a>
+<!-- Active State: Menu -->
+<a class="bg-primary dark:bg-primary-fixed text-on-primary dark:text-on-primary-fixed rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-lg text-label-lg">Menu</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-lg text-label-lg">Billing</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Users</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<div class="p-md mt-auto">
+<button class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-error hover:bg-error-container/20 transition-colors">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-lg text-label-lg">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-64 min-h-screen flex flex-col bg-surface">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 sticky z-40 flex justify-between items-center px-md h-pos-touch-target bg-surface dark:bg-primary-container shadow-sm">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 hover:bg-surface-container-high rounded-full" id="sidebarToggle">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-primary dark:text-on-primary-fixed leading-tight hidden sm:block">Menu Management</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary sm:hidden">Menu</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden sm:flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md placeholder:text-on-surface-variant/60 w-32 md:w-48" placeholder="Search..." type="text"/>
+</div>
+<button class="p-2 text-primary hover:bg-surface-container-high transition-colors rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional barista profile picture with warm cinematic lighting, showing a friendly expression, captured in an artisanal café setting with bokeh coffee equipment in the background. High-quality corporate portrait style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdeC8V8VcatTMd1NJG7uw9sWwB2WEMROAaVTnO9KGDC8n559SzF0sCvi_nOEVo9sbJ-84ZaJLj0c7vDNhnyMqbSBQ7RQfiaqsyDwfEVgVwnG0qor_v1fTJEzjLR3uW58YXqZ1HWQLwnEVXWcWLKIeWvvlHw_HR9eNzXuyBr9kd5vaO8-aJP_VbeP8787j68R1k68NIxM4akoBqTVxUHsbp33tNKQF8DMLjTOVHuUkDRe51RNa3D6Q0s6t-tdQ3OKpQRX1AUfNqppc"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-md flex-1 md:overflow-y-auto custom-scrollbar">
+<!-- Category Management Bento Grid -->
+<section class="mb-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-sm gap-4">
+<h2 class="font-headline-md text-headline-md text-primary">Menu Categories</h2>
+<button class="flex items-center justify-center gap-2 text-primary bg-secondary-container px-4 py-2 rounded-lg font-label-lg hover:bg-secondary-fixed transition-colors">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        Manage Categories
+                    </button>
+</div>
+<div class="flex flex-nowrap md:grid md:grid-cols-2 lg:grid-cols-4 gap-grid-gutter overflow-x-auto pb-4 md:pb-0 custom-scrollbar snap-x">
+<!-- Category Card -->
+<div class="flex-shrink-0 w-[240px] md:w-auto bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant hover:shadow-md transition-shadow cursor-pointer group snap-start">
+<div class="flex items-start justify-between">
+<div class="w-12 h-12 rounded-lg bg-primary-fixed flex items-center justify-center text-primary mb-sm">
+<span class="material-symbols-outlined text-3xl">coffee</span>
+</div>
+<span class="font-label-sm px-2 py-1 bg-surface-variant rounded text-on-surface-variant">12 Items</span>
+</div>
+<h3 class="font-headline-md text-headline-md mt-2">Hot Drinks</h3>
+<p class="text-on-surface-variant text-body-md">Classic espresso and milk beverages</p>
+</div>
+<div class="flex-shrink-0 w-[240px] md:w-auto bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant hover:shadow-md transition-shadow cursor-pointer snap-start">
+<div class="flex items-start justify-between">
+<div class="w-12 h-12 rounded-lg bg-secondary-container flex items-center justify-center text-secondary mb-sm">
+<span class="material-symbols-outlined text-3xl">icecream</span>
+</div>
+<span class="font-label-sm px-2 py-1 bg-surface-variant rounded text-on-surface-variant">8 Items</span>
+</div>
+<h3 class="font-headline-md text-headline-md mt-2">Cold Brews</h3>
+<p class="text-on-surface-variant text-body-md">Chilled artisanal coffee selections</p>
+</div>
+<div class="flex-shrink-0 w-[240px] md:w-auto bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant hover:shadow-md transition-shadow cursor-pointer snap-start">
+<div class="flex items-start justify-between">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface-variant mb-sm">
+<span class="material-symbols-outlined text-3xl">bakery_dining</span>
+</div>
+<span class="font-label-sm px-2 py-1 bg-surface-variant rounded text-on-surface-variant">15 Items</span>
+</div>
+<h3 class="font-headline-md text-headline-md mt-2">Pastries</h3>
+<p class="text-on-surface-variant text-body-md">Freshly baked daily artisanal treats</p>
+</div>
+<div class="flex-shrink-0 w-[240px] md:w-auto bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant border-dashed flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer min-h-[160px] snap-start">
+<span class="material-symbols-outlined text-4xl mb-2">add_circle</span>
+<span class="font-label-lg">Add Category</span>
+</div>
+</div>
+</section>
+<!-- Items Section -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="p-md flex flex-wrap gap-4 items-center justify-between border-b border-outline-variant">
+<div class="flex flex-col sm:flex-row sm:items-center gap-4 w-full sm:w-auto">
+<h2 class="font-headline-md text-headline-md">Inventory</h2>
+<div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 custom-scrollbar">
+<button class="whitespace-nowrap px-3 py-1 bg-primary text-on-primary rounded-full text-label-sm">All</button>
+<button class="whitespace-nowrap px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full text-label-sm hover:bg-outline-variant/30">Active</button>
+<button class="whitespace-nowrap px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full text-label-sm hover:bg-outline-variant/30">Out of Stock</button>
+</div>
+</div>
+<button class="w-full sm:w-auto bg-primary text-on-primary px-6 py-3 rounded-lg font-label-lg flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all" onclick="document.getElementById('addModal').classList.remove('hidden')">
+<span class="material-symbols-outlined">add</span>
+                        Add New Item
+                    </button>
+</div>
+<!-- Desktop View Table -->
+<div class="hidden lg:block overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low text-on-surface-variant uppercase font-label-sm">
+<tr>
+<th class="px-md py-4 font-semibold">Item Details</th>
+<th class="px-md py-4 font-semibold">Category</th>
+<th class="px-md py-4 font-semibold">Price</th>
+<th class="px-md py-4 font-semibold text-center">GST%</th>
+<th class="px-md py-4 font-semibold text-center">Availability</th>
+<th class="px-md py-4 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="order-zebra group hover:bg-surface-container-high transition-colors">
+<td class="px-md py-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg overflow-hidden bg-secondary-container">
+<img class="w-full h-full object-cover" data-alt="A close-up high-resolution photo of a perfect cafe latte with intricate heart-shaped latte art, served in a ceramic cup on a rustic wooden table. Warm soft morning light illuminates the creamy texture and rich brown espresso tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn47M4o123qN7n_H18b9CFcX-1SkDyjXzPDdkdR4jXi0w8vjddvZ7d1m6FYwbUZvQ2fvgqvymvc_7xuiUxSbBLieWO3OuoEI9aBnJqgwU7n4CY1A24KwSgXTPdpHww8wIOB4KKm7pujTfUR2KDH2tYPFJnYaCX5GiKztWp4hwSbdZx9Cvbc5Lk30JB1X3ciT-pySBvf9IVbMfkqSZKcQVtKRw3AGaGaMWPXbOU9iQGCv94KXU4TyHonlOQyQCG8uy8IzNPvDNXHIw"/>
+</div>
+<div>
+<p class="font-label-lg text-primary">Caffe Latte</p>
+<p class="text-label-sm text-on-surface-variant">SKU: HD-001</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 rounded-full bg-primary-fixed text-primary text-label-sm">Hot Drinks</span>
+</td>
+<td class="px-md py-4 font-headline-md text-primary">$4.50</td>
+<td class="px-md py-4 text-center font-body-md">5%</td>
+<td class="px-md py-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</td>
+<td class="px-md py-4 text-right">
+<button class="p-2 hover:bg-primary-fixed rounded-full text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-2 hover:bg-error-container rounded-full text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="order-zebra group hover:bg-surface-container-high transition-colors">
+<td class="px-md py-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg overflow-hidden bg-secondary-container">
+<img class="w-full h-full object-cover" data-alt="A macro shot of a golden-brown, flaky butter croissant on a minimalist slate plate. The texture of the layers is highly detailed, highlighting the artisan baking process. Soft-focus bakery background with warm, inviting lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJYKu1oGrrMfQxi1LhHzqXcGFRYFmaytYPYQ03RRFu921coGYFpPxxOzD0ywbfanXXh1XjbCZLtr67VbiIsjLF5FwPRNPWRso6CAb9vl3ETxzL0DlVI-muq_okqWanf8EpuA63AZBACyvpDgD0Ayj9m_ntyrEmI-x1juJMemS3GGj5J8XHCyITCpsJXvhsRBuWpNnxp_hW2KuPBkrulFa9n1Z5cN0xfgN6KhTZuMTpuNO1xwmfsH1kzQkiNq-HBYL7DVwYzoIZ3Bs"/>
+</div>
+<div>
+<p class="font-label-lg text-primary">Butter Croissant</p>
+<p class="text-label-sm text-on-surface-variant">SKU: PS-042</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-label-sm">Pastries</span>
+</td>
+<td class="px-md py-4 font-headline-md text-primary">$3.75</td>
+<td class="px-md py-4 text-center font-body-md">0%</td>
+<td class="px-md py-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</td>
+<td class="px-md py-4 text-right">
+<button class="p-2 hover:bg-primary-fixed rounded-full text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-2 hover:bg-error-container rounded-full text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="order-zebra group hover:bg-surface-container-high transition-colors">
+<td class="px-md py-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg overflow-hidden bg-secondary-container">
+<img class="w-full h-full object-cover" data-alt="An aesthetic glass of dark, rich cold brew coffee with large clear ice cubes. Condensation is visible on the outside of the glass. The background is a clean, modern cafe interior with neutral tones and soft natural light from a window." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoeLarHCqydjZPTNX4aiBmr_sQTvROWU5ZiBVkx6TQhYfjne4_lsPiFonJV9waQtySY7_vLNIl4milzY7zkwOoXZ9N3qR21isFbIOTq6aI5IrWTfOg3MJfkAcN7BWzvqzzouuSNt62EETejNomMAk71NIxfEuV28tpO4hbVOBZQ8DXc7ze7KK3-0v0Ngc7XTE-v9ZwqkPXrlKspykYPG1UgMtO522ciS_VNE57vKA2lN_clQt2Og9rdxTMxth1BhC8mryJ2rxCEUM"/>
+</div>
+<div>
+<p class="font-label-lg text-primary">Nitrogen Cold Brew</p>
+<p class="text-label-sm text-on-surface-variant">SKU: CB-012</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-secondary text-label-sm">Cold Brews</span>
+</td>
+<td class="px-md py-4 font-headline-md text-primary">$5.50</td>
+<td class="px-md py-4 text-center font-body-md">5%</td>
+<td class="px-md py-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</td>
+<td class="px-md py-4 text-right">
+<button class="p-2 hover:bg-primary-fixed rounded-full text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-2 hover:bg-error-container rounded-full text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Mobile Card View -->
+<div class="lg:hidden divide-y divide-outline-variant">
+<!-- Mobile Item Card 1 -->
+<div class="p-md bg-surface-container-lowest">
+<div class="flex items-center gap-4 mb-3">
+<div class="w-16 h-16 rounded-lg overflow-hidden bg-secondary-container flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Caffe Latte" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn47M4o123qN7n_H18b9CFcX-1SkDyjXzPDdkdR4jXi0w8vjddvZ7d1m6FYwbUZvQ2fvgqvymvc_7xuiUxSbBLieWO3OuoEI9aBnJqgwU7n4CY1A24KwSgXTPdpHww8wIOB4KKm7pujTfUR2KDH2tYPFJnYaCX5GiKztWp4hwSbdZx9Cvbc5Lk30JB1X3ciT-pySBvf9IVbMfkqSZKcQVtKRw3AGaGaMWPXbOU9iQGCv94KXU4TyHonlOQyQCG8uy8IzNPvDNXHIw"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-lg text-primary">Caffe Latte</p>
+<p class="text-label-sm text-on-surface-variant">SKU: HD-001</p>
+</div>
+<p class="font-headline-md text-primary">$4.50</p>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-primary text-xs font-semibold">Hot Drinks</span>
+<span class="text-xs text-on-surface-variant">GST 5%</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2">
+<span class="text-label-sm text-on-surface-variant">Available</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+</label></div></div></div></div></section></div></main></body></html>

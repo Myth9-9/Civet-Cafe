@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Billing History | Civet Cafe POS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#e3beb8",
+                    "on-primary-fixed-variant": "#5b403c",
+                    "surface": "#fff8f6",
+                    "on-error": "#ffffff",
+                    "primary": "#271310",
+                    "on-tertiary-fixed": "#1b1c1b",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#181818",
+                    "on-surface-variant": "#504442",
+                    "on-tertiary-fixed-variant": "#464746",
+                    "on-secondary-fixed-variant": "#4c4542",
+                    "outline": "#827472",
+                    "on-surface": "#2c160e",
+                    "on-primary-fixed": "#2b1613",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#2c2d2c",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#ece0dc",
+                    "on-secondary-fixed": "#201a18",
+                    "surface-variant": "#ffdbd0",
+                    "surface-dim": "#fbd1c4",
+                    "surface-container": "#ffe9e3",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#959492",
+                    "secondary-fixed-dim": "#cfc4c0",
+                    "on-secondary-container": "#6b6360",
+                    "on-background": "#2c160e",
+                    "surface-container-low": "#fff1ed",
+                    "tertiary-fixed-dim": "#c7c6c4",
+                    "background": "#fff8f6",
+                    "inverse-on-surface": "#ffede8",
+                    "primary-container": "#3e2723",
+                    "primary-fixed": "#ffdad4",
+                    "secondary-fixed": "#ece0dc",
+                    "on-error-container": "#93000a",
+                    "on-primary-container": "#ae8d87",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fff8f6",
+                    "inverse-surface": "#442a22",
+                    "tertiary-fixed": "#e4e2e0",
+                    "secondary": "#655d5a",
+                    "outline-variant": "#d3c3c0",
+                    "surface-tint": "#745853",
+                    "surface-container-highest": "#ffdbd0",
+                    "surface-container-high": "#ffe2da",
+                    "primary-fixed-dim": "#e3beb8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "40px",
+                    "pos-touch-target": "48px",
+                    "xs": "4px",
+                    "md": "24px",
+                    "base": "8px",
+                    "sm": "12px",
+                    "grid-gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Lexend"],
+                    "label-lg": ["Inter"],
+                    "headline-md": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Lexend"],
+                    "headline-lg": ["Lexend"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body { background-color: #fff8f6; font-family: 'Inter', sans-serif; color: #2c160e; }
+      .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+      .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: #fff1ed; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #d3c3c0; border-radius: 10px; }
+      .glass-effect { backdrop-filter: blur(8px); background-color: rgba(255, 248, 246, 0.8); }
+      
+      /* Mobile drawer transition */
+      .mobile-sidebar-transition { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- Mobile Sidebar Overlay -->
+<div class="fixed inset-0 bg-primary/40 backdrop-blur-sm z-[60] hidden md:hidden" id="mobileSidebarOverlay" onclick="toggleMobileSidebar()"></div>
+<!-- SideNavBar -->
+<aside class="fixed inset-y-0 left-0 w-64 bg-surface-container-low dark:bg-tertiary-container shadow-md border-r border-outline-variant z-[70] mobile-sidebar-transition -translate-x-full md:translate-x-0" id="mainSidebar">
+<div class="px-md py-lg flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">coffee</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary">Civet Cafe</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Downtown Branch</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1 mt-4">
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">table_restaurant</span>
+<span class="font-label-lg text-label-lg">Tables</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-lg text-label-lg">Orders</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-lg text-label-lg">Menu</span>
+</a>
+<a class="bg-primary dark:bg-primary-fixed text-on-primary dark:text-on-primary-fixed rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 scale-[0.98]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-label-lg text-label-lg">Billing</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-lg text-label-lg">Users</span>
+</a>
+<a class="text-secondary dark:text-on-secondary-container hover:bg-secondary-container/50 dark:hover:bg-secondary-fixed-dim/20 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all mt-auto mb-4" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+</aside>
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-primary-container shadow-sm z-40 flex justify-between items-center px-4 md:px-md h-pos-touch-target">
+<div class="flex items-center gap-4 flex-1">
+<button class="md:hidden p-2 text-primary" onclick="toggleMobileSidebar()">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/30 flex-1 max-w-xs md:max-w-md">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full text-on-surface ml-2" placeholder="Search billing..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2 md:gap-4 ml-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 md:pl-4 md:border-l md:border-outline-variant/30">
+<div class="text-right hidden sm:block">
+<p class="font-label-lg text-label-lg text-primary">Jordan Smith</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Store Manager</p>
+</div>
+<img class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-primary-fixed shadow-sm" data-alt="A professional headshot of a store manager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzUrnT_83cA4BtvSjQXhwSPxDpvhGgXPdXvvb4bCKU1zDQbP81QKeEkuGDZKFxOO_24rIPBqRO5927ruSmNUx0DecLW1tD7-ydZ3AsjzMKrUs-SmGJp5RWRLx5YQ4oaov9tbbTD3y6Zfs62R1o6lgfvmDiGNIE4UKZx1YUg3KCZy9UbE41s_NBzZObhl8JO7aCpWStSkjpm3_ifxeeprnND9T9xTtFovp8PKbxbzwwQBjPVmmYNWn1lJIv7fSl5Y-ksOqDjjkhqg0"/>
+</div>
+</div>
+</header>
+<div class="p-4 md:p-lg flex flex-col gap-6 max-w-7xl mx-auto w-full">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-primary">Billing History</h2>
+<p class="font-body-md text-sm md:text-body-md text-on-surface-variant">Manage and review all customer transactions.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 md:px-6 py-2.5 md:py-3 bg-secondary-container text-on-secondary-container rounded-xl font-label-lg hover:brightness-95 transition-all text-sm md:text-base">
+<span class="material-symbols-outlined text-[18px] md:text-[20px]">file_download</span>
+                        Export
+                    </button>
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 md:px-6 py-2.5 md:py-3 bg-primary text-on-primary rounded-xl font-label-lg hover:shadow-lg active:scale-95 transition-all text-sm md:text-base">
+<span class="material-symbols-outlined text-[18px] md:text-[20px]">add</span>
+                        New Invoice
+                    </button>
+</div>
+</div>
+<!-- Stats Bar (Responsive Grid) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+<div class="sm:col-span-2 bg-surface-container-high p-5 md:p-6 rounded-2xl border border-outline-variant/20 flex justify-between items-center relative overflow-hidden">
+<div class="z-10">
+<p class="font-label-sm text-[10px] md:text-label-sm text-on-surface-variant uppercase tracking-wider">Total Revenue (Today)</p>
+<h3 class="font-display-lg text-2xl md:text-display-lg text-primary mt-1">$4,282.50</h3>
+<div class="mt-2 flex items-center gap-1 text-green-700">
+<span class="material-symbols-outlined text-[14px] md:text-[16px]">trending_up</span>
+<span class="font-label-sm text-xs">+12.5%</span>
+</div>
+</div>
+<div class="opacity-10 absolute -right-4 -bottom-4">
+<span class="material-symbols-outlined text-[100px] md:text-[120px]">payments</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-5 md:p-6 rounded-2xl border border-outline-variant/20">
+<p class="font-label-sm text-[10px] md:text-label-sm text-on-surface-variant uppercase tracking-wider">Total Invoices</p>
+<h3 class="font-headline-lg text-2xl md:text-headline-lg text-primary mt-1">142</h3>
+<p class="text-[10px] md:text-xs text-on-surface-variant mt-2">Avg. $30.15 / order</p>
+</div>
+<div class="bg-surface-container-low p-5 md:p-6 rounded-2xl border border-outline-variant/20">
+<p class="font-label-sm text-[10px] md:text-label-sm text-on-surface-variant uppercase tracking-wider">Pending</p>
+<h3 class="font-headline-lg text-2xl md:text-headline-lg text-primary mt-1">12</h3>
+<div class="w-full bg-surface-variant rounded-full h-1.5 mt-4">
+<div class="bg-primary h-1.5 rounded-full" style="width: 25%"></div>
+</div>
+</div>
+</div>
+<!-- Filter Controls (Responsive: Mobile Drawer, Desktop Bar) -->
+<div class="md:hidden">
+<button class="w-full flex items-center justify-between bg-surface-container p-4 rounded-xl border border-outline-variant/20 shadow-sm text-on-surface font-label-lg" onclick="toggleFilterDrawer()">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined">filter_alt</span>
+<span>Filter Transactions</span>
+</div>
+<span class="material-symbols-outlined" id="filterIcon">expand_more</span>
+</button>
+<div class="hidden mt-2 bg-surface-container p-4 rounded-xl border border-outline-variant/20 shadow-sm space-y-4" id="filterDrawer">
+<div>
+<label class="block text-[10px] font-bold text-on-surface-variant uppercase mb-1">Date Range</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 text-sm" type="date"/>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-on-surface-variant uppercase mb-1">Payment Status</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 text-sm">
+<option>All Statuses</option>
+<option>Paid</option>
+<option>Pending</option>
+<option>Refunded</option>
+</select>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-on-surface-variant uppercase mb-1">Order Type</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 text-sm">
+<option>Dine-in</option>
+<option>Takeaway</option>
+<option>Delivery</option>
+</select>
+</div>
+<button class="w-full bg-primary text-on-primary py-2.5 rounded-lg font-label-lg mt-2">Apply Filters</button>
+</div>
+</div>
+<div class="hidden md:flex bg-surface-container p-4 rounded-2xl gap-4 items-center border border-outline-variant/20 shadow-sm">
+<div class="flex-1 min-w-[200px]">
+<label class="block text-[10px] font-bold text-on-surface-variant uppercase mb-1 ml-1">Date Range</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 font-label-lg text-on-surface focus:ring-primary focus:border-primary" type="date"/>
+</div>
+</div>
+<div class="flex-1 min-w-[200px]">
+<label class="block text-[10px] font-bold text-on-surface-variant uppercase mb-1 ml-1">Payment Status</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 font-label-lg text-on-surface focus:ring-primary focus:border-primary">
+<option>All Statuses</option>
+<option>Paid</option>
+<option>Pending</option>
+<option>Refunded</option>
+<option>Failed</option>
+</select>
+</div>
+<div class="flex-1 min-w-[200px]">
+<label class="block text-[10px] font-bold text-on-surface-variant uppercase mb-1 ml-1">Order Type</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 font-label-lg text-on-surface focus:ring-primary focus:border-primary">
+<option>Dine-in</option>
+<option>Takeaway</option>
+<option>Delivery</option>
+</select>
+</div>
+<div class="flex items-end">
+<button class="p-2.5 bg-primary text-on-primary rounded-lg hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Data Table / List -->
+<div class="bg-surface-container-lowest rounded-2xl md:rounded-3xl border border-outline-variant/20 shadow-sm overflow-hidden">
+<!-- Desktop Table View -->
+<div class="hidden md:block overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="px-6 py-4 font-label-lg text-label-lg text-on-surface">Bill #</th>
+<th class="px-6 py-4 font-label-lg text-label-lg text-on-surface">Date</th>
+<th class="px-6 py-4 font-label-lg text-label-lg text-on-surface">Customer</th>
+<th class="px-6 py-4 font-label-lg text-label-lg text-on-surface">Total Amount</th>
+<th class="px-6 py-4 font-label-lg text-label-lg text-on-surface">Status</th>
+<th class="px-6 py-4 font-label-lg text-label-lg text-on-surface text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group cursor-pointer" onclick="toggleModal('detailModal')">
+<td class="px-6 py-5 font-label-lg text-primary">#INV-8821</td>
+<td class="px-6 py-5 text-on-surface-variant text-sm">Oct 24, 2023 • 14:32</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center font-bold text-on-secondary-container text-xs">AM</div>
+<span class="font-label-lg text-on-surface">Alex Morgan</span>
+</div>
+</td>
+<td class="px-6 py-5 font-headline-md text-on-surface">$42.50</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">PAID</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all rounded-lg" title="View Details">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all rounded-lg" title="Reprint Receipt">
+<span class="material-symbols-outlined text-[20px]">print</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-[#F5F0EE]/30 hover:bg-surface-container-low transition-colors group cursor-pointer" onclick="toggleModal('detailModal')">
+<td class="px-6 py-5 font-label-lg text-primary">#INV-8820</td>
+<td class="px-6 py-5 text-on-surface-variant text-sm">Oct 24, 2023 • 14:15</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center font-bold text-on-primary-container text-xs">BC</div>
+<span class="font-label-lg text-on-surface">Bella Chen</span>
+</div>
+</td>
+<td class="px-6 py-5 font-headline-md text-on-surface">$18.25</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">PENDING</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all rounded-lg">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all rounded-lg">
+<span class="material-symbols-outlined text-[20px]">print</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Mobile List View -->
+<div class="md:hidden divide-y divide-outline-variant/10">
+<div class="p-4 active:bg-surface-container-low transition-colors" onclick="toggleModal('detailModal')">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h4 class="font-label-lg text-primary">#INV-8821</h4>
+<p class="text-xs text-on-surface-variant">Oct 24, 2023 • 14:32</p>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-800 uppercase tracking-wide">Paid</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-secondary-container flex items-center justify-center font-bold text-on-secondary-container text-[10px]">AM</div>
+<span class="text-sm text-on-surface font-medium">Alex Morgan</span>
+</div>
+<span class="font-headline-md text-base text-primary">$42.50</span>
+</div>
+</div>
+<div class="p-4 active:bg-surface-container-low transition-colors" onclick="toggleModal('detailModal')">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h4 class="font-label-lg text-primary">#INV-8820</h4>
+<p class="text-xs text-on-surface-variant">Oct 24, 2023 • 14:15</p>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 uppercase tracking-wide">Pending</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center font-bold text-on-primary-container text-[10px]">BC</div>
+<span class="text-sm text-on-surface font-medium">Bella Chen</span>
+</div>
+<span class="font-headline-md text-base text-primary">$18.25</span>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="px-4 md:px-6 py-4 bg-surface-container-low border-t border-outline-variant flex flex-col md:flex-row items-center justify-between gap-4">
+<p class="text-[10px] md:text-xs text-on-surface-variant">Showing 1 to 10 of 142 entries</p>
+<div class="flex items-center gap-1 md:gap-2">
+<button class="p-1.5 md:p-2 rounded-lg hover:bg-surface-container transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-primary text-on-primary text-[10px] md:text-xs font-bold">1</button>
+<button class="w-7 h-7 md:w-8 md:h-8 rounded-lg hover:bg-surface-container text-[10px] md:text-xs transition-all">2</button>
+<button class="w-7 h-7 md:w-8 md:h-8 rounded-lg hover:bg-surface-container text-[10px] md:text-xs transition-all">3</button>
+<button class="p-1.5 md:p-2 rounded-lg hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Detail Modal (Mobile-ready Drawer on Small Screens) -->
+<div class="fixed inset-0 z-[100] hidden" id="detailModal">
+<div class="absolute inset-0 bg-primary/40 backdrop-blur-sm" onclick="toggleModal('detailModal')"></div>
+<div class="absolute right-0 bottom-0 md:top-0 w-full md:max-w-md bg-surface shadow-2xl flex flex-col transform translate-y-full md:translate-y-0 md:translate-x-full transition-transform duration-300 ease-in-out border-t md:border-t-0 md:border-l border-outline-variant/30 max-h-[90vh] md:max-h-full rounded-t-3xl md:rounded-t-none" id="modalContent">
+<div class="p-4 md:p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low sticky top-0 z-10 rounded-t-3xl md:rounded-t-none">
+<div>
+<h3 class="font-headline-md text-lg md:text-headline-md text-primary">Invoice #INV-8821</h3>
+<p class="font-label-sm text-[10px] md:text-label-sm text-on-surface-variant uppercase">Transaction Details</p>
+</div>
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors" onclick="toggleModal('detailModal')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-4 md:p-md custom-scrollbar">
+<div class="flex flex-col gap-6">
+<!-- Summary Card -->
+<div class="bg-surface-container p-4 md:p-6 rounded-2xl border border-outline-variant/20">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tight">Status</p>
+<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-800 mt-1 inline-block uppercase">Paid in full</span>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tight">Method</p>
+<p class="font-label-lg text-primary mt-1 text-sm">Visa •••• 4242</p>
+</div>
+</div>
+<div class="h-px bg-outline-variant/30 my-4"></div>
+<div class="space-y-2 md:space-y-3">
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Subtotal</span>
+<span class="font-medium">$38.00</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Tax (10%)</span>
+<span class="font-medium">$3.80</span>
+</div>
+<div class="flex justify-between pt-3 border-t border-dashed border-outline-variant">
+<span class="font-bold text-primary">Total Paid</span>
+<span class="font-bold text-primary text-xl">$42.50</span>
+</div>
+</div>
+</div>
+<!-- Order Items -->
+<div>
+<h4 class="font-label-lg text-label-lg text-primary mb-4">Order Items</h4>
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[20px]">coffee</span>
+</div>
+<div class="flex-1">
+<p class="font-label-lg text-on-surface text-sm">Caramel Macchiato</p>
+<p class="text-[10px] text-on-surface-variant">Large, Oat Milk</p>
+</div>
+<div class="text-right">
+<p class="font-label-lg text-on-surface text-sm">x2</p>
+<p class="text-[10px] font-bold text-primary">$14.00</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[20px]">bakery_dining</span>
+</div>
+<div class="flex-1">
+<p class="font-label-lg text-on-surface text-sm">Almond Croissant</p>
+<p class="text-[10px] text-on-surface-variant">Warmed</p>
+</div>
+<div class="text-right">
+<p class="font-label-lg text-on-surface text-sm">x3</p>
+<p class="text-[10px] font-bold text-primary">$18.00</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Customer Info -->
+<div class="bg-primary/5 p-4 rounded-xl">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-xs">AM</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-lg text-primary text-sm truncate">Alex Morgan</p>
+<p class="text-[10px] text-on-surface-variant truncate">alex.morgan@email.com</p>
+</div>
+<button class="p-1.5 hover:bg-primary/10 rounded-full transition-colors text-primary">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 md:p-md bg-surface-container-low border-t border-outline-variant flex gap-2 md:gap-3 sticky bottom-0">
+<button class="flex-1 px-4 py-2.5 md:py-3 bg-primary text-on-primary rounded-xl font-label-lg flex items-center justify-center gap-2 text-sm">
+<span class="material-symbols-outlined text-[18px] md:text-[20px]">print</span>
+                    Print Receipt
+                </button>
+<button class="px-4 py-2.5 md:py-3 bg-secondary-container text-on-secondary-container rounded-xl font-label-lg flex items-center justify-center gap-2 text-sm">
+<span class="material-symbols-outlined text-[18px] md:text-[20px]">mail</span>
+                    Email
+                </button>
+</div>
+</div>
+</div>
+<script>
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            const content = document.getElementById('modalContent');
+            const isMobile = window.innerWidth < 768;
+            
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    if (isMobile) {
+                        content.classList.remove('translate-y-full');
+                    } else {
+                        content.classList.remove('translate-x-full');
+                    }
+                }, 10);
+            } else {
+                if (isMobile) {
+                    content.classList.add('translate-y-full');
+                } else {
+                    content.classList.add('translate-x-full');
+                }
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('mainSidebar');
+            const overlay = document.getElementById('mobileSidebarOverlay');
+            const isHidden = sidebar.classList.contains('-translate-x-full');
+            
+            if (isHidden) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function toggleFilterDrawer() {
+            const drawer = document.getElementById('filterDrawer');
+            const icon = document.getElementById('filterIcon');
+            const isHidden = drawer.classList.contains('hidden');
+            
+            if (isHidden) {
+                drawer.classList.remove('hidden');
+                icon.textContent = 'expand_less';
+            } else {
+                drawer.classList.add('hidden');
+                icon.textContent = 'expand_more';
+            }
+        }
+    </script>
+</body></html>
